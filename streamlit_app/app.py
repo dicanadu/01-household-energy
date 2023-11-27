@@ -69,13 +69,16 @@ states=('Alabama',
 
 ############### user input ##################
 
-state = st.selectbox('Select your state:', states)
+state_name = st.selectbox('Select your state:', states)
 
-st.slider('Number of persons in your household:', 1, 7, 1)
+NHSLDMEM = st.slider('Number of persons in your household:', 1, 7, 2)
 
-st.number_input('Estimated area of your house in sq.feet:',
-                min_value=100, max_value=None, value="min", step=10)
+SQFTEST = st.number_input('Estimated area of your house in sq.feet:',
+                min_value=100, max_value=None, value=1500, step=10)
 
+
+STORIES = st.slider('How many stories does your house have?',
+                    min_value=1, max_value=5, value=2)
 
 ############### API ###########################
 
