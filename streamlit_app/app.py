@@ -207,19 +207,19 @@ state_name = states.get(state_postal)
 
 numeric_features = ['NCOMBATH', 'NHAFBATH', 'TOTROOMS', 'NUMFRIG', 'MICRO', 'TVCOLOR', 'DESKTOP', 'NUMLAPTOP', 'LGTIN1TO4', 'LGTIN4TO8', 'LGTINMORE8', 'NHSLDMEM', 'SQFTEST']
 for feat in numeric_features:
-    params[feat] = st.number_input(label=label_dict.get(feat))
-
+    params[feat] = int(st.number_input(label=label_dict.get(feat)))
+    st.write(params[feat])
 
 ##### features where dropdown input is transferred to numeric #####
 
-num_checkbox_features = ['TYPEHUQ', 'STORIES', 'YEARMADERANGE', 'WALLTYPE', 'ROOFTYPE', 'WINDOWS', 'SWIMPOOL', 'DISHWASH', 'CWASHER', 'DRYER', 'TELLWORK', 'TELLDAYS', 'HEATHOME', 'EQUIPM', 'NUMPORTEL', 'AIRCOND', 'NUMPORTAC', 'SMARTMETER', 'SOLAR']
+num_checkbox_features = ['TYPEHUQ', 'STORIES', 'YEARMADERANGE', 'WALLTYPE', 'ROOFTYPE', 'WINDOWS', 'SWIMPOOL', 'DISHWASH', 'CWASHER', 'DRYER', 'TELLWORK', 'HEATHOME', 'EQUIPM', 'AIRCOND', 'SMARTMETER', 'SOLAR']
 mapped_features={}
 for feature in num_checkbox_features:
     mapped_features[feature]=dict(val.split(' ', 1)[::-1] for val in values_dict.get(feature).split('\n'))
     user_value = st.selectbox(label=label_dict.get(feature),
                               options=mapped_features.get(feature).keys())
-    params[feat] = mapped_features.get(feature).get(user_value)
-
+    params[feature] = int(mapped_features.get(feature).get(user_value))
+    st.write(params[feature])
 
 ##### features which have both numeric range and text #####
 
@@ -233,20 +233,14 @@ for feature in numeric_features_dropdown:
     mapped_features[feature] = d
     user_value = st.selectbox(label=label_dict.get(feature),
                               options=mapped_features.get(feature).keys())
-    params[feat] = mapped_features.get(feature).get(user_value)
-
+    params[feature] = int(mapped_features.get(feature).get(user_value))
+    st.write(params[feature])
 
 ###### section HOUSEHOLD CHARACTERISTICS ######
 
 '''
-### Your household
+### Parameters sent to the API:
 '''
-
-NHSLDMEM = st.slider('Number of persons in your household:', 1, 7, 2)
-
-SQFTEST = st.number_input('Estimated area of your house in sq.feet:',
-                min_value=100, max_value=None, value=1500, step=10)
-
 
 st.write(params)
 
