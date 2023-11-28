@@ -8,6 +8,7 @@ twine
 numpy
 pandas
 scikit-learn
+seaborn
 
 # tests/linter
 black
