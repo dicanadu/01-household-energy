@@ -21,14 +21,17 @@ This application will estimate your yearly energy consumption in kwh.
 
 # API:
 params={}
-#url=
-#response=requests.get(url,params=params).json()
+
+## test of the API to docker container on the cloud
+test_params = {'state_name': 'TX'}
+url='https://householdpredictions-jaiabuy6eq-ew.a.run.app/predict'
+response=requests.get(url,params=test_params).json()
 
 #output prediction:
-#pred_kwh=response.get('y_pred')
+pred_kwh=response.get("kwh_prediction")
 
 # dummy prediciton - actual median of the dataset
-pred_kwh=9346.435000000001
+#pred_kwh=9346.435000000001
 
 
 
@@ -146,8 +149,6 @@ for feature in selectbox_features:
 
 ##### features with purely numeric input #####
 
-#numeric_features = selected['Variable'][selected['Response Codes'].str.match('[0-9]+\s*-\s*[0-9]+$')]
-
 numeric_features = ['NCOMBATH', 'NHAFBATH', 'TOTROOMS', 'NUMFRIG', 'MICRO', 'TVCOLOR', 'DESKTOP', 'NUMLAPTOP', 'LGTIN1TO4', 'LGTIN4TO8', 'LGTINMORE8', 'NHSLDMEM', 'SQFTEST']
 for feat in numeric_features:
     params[feat] = st.number_input(label=label_dict.get(feat))
@@ -155,12 +156,17 @@ for feat in numeric_features:
 
 ##### features where dropdown input is transferred to numeric #####
 
-num_checkbox_features = selected['Variable'][ (selected['Response Codes'].str.contains('\n')) & (selected['Type']=='Num')].to_list()
+#num_checkbox_features = selected['Variable'][ (selected['Response Codes'].str.contains('\n')) & (selected['Type']=='Num')].to_list()
 
+num_checkbox_features = ['TYPEHUQ', 'STORIES', 'YEARMADERANGE', 'WALLTYPE', 'ROOFTYPE', 'WINDOWS', 'SWIMPOOL', 'DISHWASH', 'CWASHER', 'DRYER', 'TELLWORK', 'TELLDAYS', 'HEATHOME', 'EQUIPM', 'NUMPORTEL', 'AIRCOND', 'NUMPORTAC', 'SMARTMETER', 'SOLAR']
 mapped_features={}
 for feature in num_checkbox_features:
     mapped_features[feature]=dict(val.split(' ', 1)[::-1] for val in values_dict.get(feature).split('\n'))
 
+
+#for feature in num_checkbox_features:
+#    st.selectbox(label = label_dict.get(feature),
+#                 options = )
 
 
 ###### section HOUSEHOLD CHARACTERISTICS ######
@@ -180,4 +186,4 @@ st.write(params)
 if st.button('Estimate my consumption'):
     st.write(f'''
              Your estimated consumption:\n
-             {pred_kwh:.1f} kWh''')
+             {pred_kwh} kWh''')
