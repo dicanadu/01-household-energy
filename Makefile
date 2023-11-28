@@ -53,3 +53,30 @@ pypi_test:
 
 pypi:
 	@twine upload dist/* -u $(PYPI_USERNAME)
+
+# ----------------------------------
+#      		PACKAGE ACTIONS
+# ----------------------------------
+.DEFAULT_GOAL := default
+reinstall_package:
+	@pip uninstall -y household_prediction || :
+	@pip install -e .
+
+run_api:
+	uvicorn api.fast:app --reload
+
+# ----------------------------------
+#      		DOCKER ACTIONS
+# ----------------------------------
+# .DEFAULT_GOAL := default
+build_docker_prod:
+	docker build --platform linux/amd64 -t ${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT}/household-predictions/${GAR_IMAGE}:prod
+
+push_to_artifact:
+	docker push ${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT}/household-predictions/${GAR_IMAGE}:prod
+
+deploy_cloud_run:
+	gcloud run deploy --image ${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT}/household-predictions/${GAR_IMAGE}:prod --memory ${GAR_MEMORY} --region ${GCP_REGION} --env-vars-file .env.yaml
+
+shutdown_cloud_instance:
+	gcloud run services delete ${INSTANCE}

@@ -19,8 +19,15 @@ yapf
 # API
 gcsfs
 google-cloud-storage
+google-cloud-bigquery
 mlflow
 s3fs
+# adding the below packages for api
+fastapi
+pytz
+uvicorn
+python-dotenv
+docker
 
 # utilities
 six>=1.14
