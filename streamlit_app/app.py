@@ -5,16 +5,7 @@ import pandas as pd
 
 ############# functions ############
 
-def make_selectbox(feature):
-    '''
-    Take a feature that needs a dropdown selector
-    Returns a tuple of ('label',['option1','option2'])
-    Which is an input to streamlit checkbox
-    '''
-    label = label_dict.get(feature)
-    dropdown_list = values_dict.get(feature).split('\n')
 
-    return label,dropdown_list
 
 
 '''
@@ -51,6 +42,9 @@ val_cols = ['Description and Labels','Response Codes']
 key_col=['Variable']
 label_dict = selected.set_index(key_col)[val_cols[0]].to_dict()
 values_dict = selected.set_index(key_col)[val_cols[1]].to_dict()
+
+# sections
+sections = list(selected.Section.unique())
 
 # U.S. states selector
 states = {'AL': 'Alabama',
@@ -138,27 +132,36 @@ state_name = states.get(state_postal)
 ### Your home
 '''
 
-#STORIES = st.slider('How many stories does your house have?', min_value=1, max_value=5, value=2)
-
-your_home = 'TYPEHUQ','STORIES','YEARMADERANGE','NCOMBATH','NHAFBATH','TOTROOMS','WALLTYPE','ROOFTYPE','WINDOWS','SWIMPOOL','SQFTEST'
-
-#home_explained =
-#home_dict = {k:v for k,v in zip(your_home, home_explained)}
-#for param in your_home:    st.number_input(param)
 
 ##### features that need a dropdown #####
 
-selectbox_features = selected['Variable'][selected['Response Codes'].str.contains('\n')].to_list()
-selectbox_features.remove('REGIONC') # will be derived from state code
-for feat in selectbox_features:
-    params[feat] = make_selectbox(feat)
+#selectbox_features = selected['Variable'][selected['Response Codes'].str.contains('\n')].to_list()
+#selectbox_features.remove('REGIONC') # will be derived from state code
+
+selectbox_features = ['BA_climate', 'IECC_climate_code']
+for feature in selectbox_features:
+    params[feature] = st.selectbox(label = label_dict.get(feature),
+                                options= values_dict.get(feature).split('\n'))
 
 
-##### features with numeric input #####
+##### features with purely numeric input #####
 
-numeric_features = selected['Variable'][selected['Response Codes'].str.match('[0-9]+\s*-\s*[0-9]+$')]
+#numeric_features = selected['Variable'][selected['Response Codes'].str.match('[0-9]+\s*-\s*[0-9]+$')]
+
+numeric_features = ['NCOMBATH', 'NHAFBATH', 'TOTROOMS', 'NUMFRIG', 'MICRO', 'TVCOLOR', 'DESKTOP', 'NUMLAPTOP', 'LGTIN1TO4', 'LGTIN4TO8', 'LGTINMORE8', 'NHSLDMEM', 'SQFTEST']
 for feat in numeric_features:
     params[feat] = st.number_input(label=label_dict.get(feat))
+
+
+##### features where dropdown input is transferred to numeric #####
+
+num_checkbox_features = selected['Variable'][ (selected['Response Codes'].str.contains('\n')) & (selected['Type']=='Num')].to_list()
+
+mapped_features={}
+for feature in num_checkbox_features:
+    mapped_features[feature]=dict(val.split(' ', 1)[::-1] for val in values_dict.get(feature).split('\n'))
+
+
 
 ###### section HOUSEHOLD CHARACTERISTICS ######
 
@@ -168,7 +171,7 @@ SQFTEST = st.number_input('Estimated area of your house in sq.feet:',
                 min_value=100, max_value=None, value=1500, step=10)
 
 
-
+st.write(params)
 
 
 
