@@ -2,8 +2,10 @@ import requests
 import streamlit as st
 import pandas as pd
 
+########## page info ############
 
-############# functions ############
+st.set_page_config(page_title='U.S. household electricity consumption'
+                   , page_icon='🏠')
 
 
 
@@ -13,7 +15,7 @@ import pandas as pd
 # 🇺🇸🏠
 
 
-This application will estimate your yearly energy consumption in kwh.
+This application will estimate your yearly energy consumption (in kWh).
 
 '''
 
@@ -25,10 +27,12 @@ params={}
 ## test of the API to docker container on the cloud
 test_params = {'state_name': 'TX'}
 url='https://householdpredictions-jaiabuy6eq-ew.a.run.app/predict'
-response=requests.get(url,params=test_params).json()
 
-#output prediction:
-pred_kwh=response.get("kwh_prediction")
+#@st.cache_data(ttl=3600) # cache data for 1 hour
+def api_call(url, params):
+    response=requests.get(url,params).json()
+    #output prediction:
+    return response.get("kwh_prediction")
 
 
 ########### hard-coded constants ###############
@@ -160,95 +164,127 @@ states = {'AL': 'Alabama',
  'WI': 'Wisconsin',
  'WY': 'Wyoming'}
 
+# TODO state to region
 
 
+########## separate features by type ##############
 
-
-
-############### user input ##################
-
-
-
-
-###### section GEOGRAPHY ##########
-
-'''
-### Your location
-'''
-
-state_postal = st.selectbox('Select your state:', states.keys())
-state_name = states.get(state_postal)
-
-# TODO derive region from state name 'REGIONC'
-
-
-###### section ADMIN ######
-
-# right now don't know how to input climate or climate code as a user
-
-##### features that need a dropdown text #####
-
-#selectbox_features = ['BA_climate', 'IECC_climate_code']
-#for feature in selectbox_features:
-#    params[feature] = st.selectbox(label = label_dict.get(feature),
-#                                options= values_dict.get(feature).split('\n'))
-
-
-####### section YOUR HOME #######
-
-
-'''
-### Your home
-'''
-
-
-
-##### features with purely numeric input #####
-
+geo_features = ['state_name']#, 'REGIONC']
+selectbox_features = ['BA_climate', 'IECC_climate_code']
 numeric_features = ['NCOMBATH', 'NHAFBATH', 'TOTROOMS', 'NUMFRIG', 'MICRO', 'TVCOLOR', 'DESKTOP', 'NUMLAPTOP', 'LGTIN1TO4', 'LGTIN4TO8', 'LGTINMORE8', 'NHSLDMEM', 'SQFTEST']
-for feat in numeric_features:
-    params[feat] = int(st.number_input(label=label_dict.get(feat)))
-    st.write(params[feat])
-
-##### features where dropdown input is transferred to numeric #####
-
 num_checkbox_features = ['TYPEHUQ', 'STORIES', 'YEARMADERANGE', 'WALLTYPE', 'ROOFTYPE', 'WINDOWS', 'SWIMPOOL', 'DISHWASH', 'CWASHER', 'DRYER', 'TELLWORK', 'HEATHOME', 'EQUIPM', 'AIRCOND', 'SMARTMETER', 'SOLAR']
+numeric_features_dropdown = ['TELLDAYS', 'NUMPORTEL', 'NUMPORTAC']
+all_features = geo_features+numeric_features+num_checkbox_features+numeric_features_dropdown#+selectbox_features
+########### dictionary of mappings ################
+
 mapped_features={}
 for feature in num_checkbox_features:
     mapped_features[feature]=dict(val.split(' ', 1)[::-1] for val in values_dict.get(feature).split('\n'))
-    user_value = st.selectbox(label=label_dict.get(feature),
-                              options=mapped_features.get(feature).keys())
-    params[feature] = int(mapped_features.get(feature).get(user_value))
-    st.write(params[feature])
-
-##### features which have both numeric range and text #####
-
-numeric_features_dropdown = ['TELLDAYS', 'NUMPORTEL', 'NUMPORTAC']
-
 for feature in numeric_features_dropdown:
     str_range, text  = values_dict[feature].split('\n')
-    print(str_range,text)
     d = {str(k):str(k) for k in range(int(str_range.split(' - ')[-1])+1)}
     d.update({text.split(' ',1)[1]:text.split(' ',1)[0]})
     mapped_features[feature] = d
-    user_value = st.selectbox(label=label_dict.get(feature),
-                              options=mapped_features.get(feature).keys())
-    params[feature] = int(mapped_features.get(feature).get(user_value))
-    st.write(params[feature])
 
-###### section HOUSEHOLD CHARACTERISTICS ######
 
-'''
+############# functions ############
+
+@st.cache_data
+def make_numeric_input(feature):
+    label = label_dict.get(feature)
+    min_value, max_value = (int(val) for val in values_dict.get(feature).split('-'))
+    return label, min_value, max_value
+
+def record_user_input(feature):
+    """
+    This function creates an input widget for a feature
+    Depending on which type the feature is.
+    It will write the user input value into params dictionary.
+    """
+    ##### geography features ######
+    if feature=='state_name':
+        state_postal = st.selectbox('Select your state:', states.keys())
+        params['state_name'] = states.get(state_postal)
+    # TODO derive region from state name 'REGIONC'
+
+
+    ##### features that need a dropdown text #####
+    if feature in selectbox_features:
+        params[feature] = st.selectbox(label = label_dict.get(feature),
+                                    options= values_dict.get(feature).split('\n'))
+    ##### features with purely numeric input #####
+    if feature in numeric_features:
+        params[feature] = int(st.number_input(*make_numeric_input(feature)))
+
+    ##### features where dropdown input is transferred to numeric #####
+    if feature in num_checkbox_features:
+        user_value = st.selectbox(label=label_dict.get(feature),
+                                  options=mapped_features.get(feature).keys())
+        params[feature] = int(mapped_features.get(feature).get(user_value))
+
+    ##### features which have both numeric range and text #####
+    if feature in numeric_features_dropdown:
+        user_value = st.selectbox(label=label_dict.get(feature),
+                                  options=mapped_features.get(feature).keys())
+        params[feature] = int(mapped_features.get(feature).get(user_value))
+
+
+
+############## tabs - organize features by sections ###############
+
+tab_main, tab_household, tab_appliances = st.tabs(['About your home',
+                                                   'Household characteristics',
+                                                    'Applicances'])
+
+#############################################
+############### user input ##################
+#############################################
+
+###### section Main: GEOGRAPHY, ADMIN, basic household (type, no. of persons) ##########
+
+with tab_main:
+    st.subheader('About your home')
+
+    main_features = ['TYPEHUQ','NHSLDMEM', 'state_name']
+    for feature in main_features:
+        record_user_input(feature)
+
+
+    ###### section ADMIN ######
+    # right now don't know how to input climate or climate code as a user
+
+
+with tab_household:
+    st.subheader('Your household')
+
+    ###### section HOUSEHOLD CHARACTERISTICS ######
+
+    household_features = ['SQFTEST', 'STORIES','YEARMADERANGE','NCOMBATH',
+ 'NHAFBATH','TOTROOMS', 'WALLTYPE','ROOFTYPE','WINDOWS', 'SWIMPOOL',
+ 'SMARTMETER']
+    for feature in household_features:
+        record_user_input(feature)
+
+
+with tab_appliances:
+    st.subheader('Applicances')
+
+    appliance_features = list(set(all_features).difference(
+        set(main_features+household_features)))
+    for feature in appliance_features:
+        record_user_input(feature)
+
+
+
 ### Parameters sent to the API:
-'''
-
-st.write(params)
+    #st.write(params)
 
 
 
 ############# callback to calculate kWh ################
 
 if st.button('Estimate my consumption'):
+    pred_kwh = api_call(url, params=test_params)
     st.write(f'''
              Your estimated consumption:\n
              {pred_kwh} kWh''')
