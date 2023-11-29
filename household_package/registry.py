@@ -2,6 +2,7 @@ import time
 import pickle
 from household_package.params import *
 from google.cloud import storage
+#from tensorflow import keras
 
 
 def save_model(model,type='baseline'):
@@ -37,7 +38,7 @@ def save_model(model,type='baseline'):
 
         # return None
 
-def load_model(stage="Production") -> keras.Model:
+def load_model(model_type='baseline'): #-> keras.Model: #stage="Production"
     """
     Return a saved model:
     - locally (latest one in alphabetical order)
@@ -48,24 +49,26 @@ def load_model(stage="Production") -> keras.Model:
 
     """
 
-    MODEL_TARGET == "gcs":
-        # 🎁 We give you this piece of code as a gift. Please read it carefully! Add a breakpoint if needed!
-        print(Fore.BLUE + f"\nLoad latest model from GCS..." + Style.RESET_ALL)
+    #MODEL_TARGET == "gcs":
+    # 🎁 We give you this piece of code as a gift. Please read it carefully! Add a breakpoint if needed!
+    #print(Fore.BLUE + f"\nLoad latest model from GCS..." + Style.RESET_ALL)
+    client = storage.Client()
+    blobs = list(client.get_bucket(BUCKET_NAME).list_blobs(prefix="model"))
+    try:
+        latest_blob = max(blobs, key=lambda x: x.updated)
+        latest_model_path_to_save = os.path.join(LOCAL_REGISTRY_PATH, latest_blob.name)
+        latest_blob.download_to_filename(latest_model_path_to_save)
 
-        client = storage.Client()
-        blobs = list(client.get_bucket(BUCKET_NAME).list_blobs(prefix="model"))
+        # for sklearn (baseline)
+        if model_type=='baseline':
+            with open(latest_model_path_to_save , 'rb') as f:
+                latest_model = pickle.load(f)
+        #else:
+            # for tf.keras models
+            #latest_model = keras.models.load_model(latest_model_path_to_save)
+        print("✅ Latest model downloaded from cloud storage")
+        return latest_model
 
-        try:
-            latest_blob = max(blobs, key=lambda x: x.updated)
-            latest_model_path_to_save = os.path.join(LOCAL_REGISTRY_PATH, latest_blob.name)
-            latest_blob.download_to_filename(latest_model_path_to_save)
-
-            latest_model = keras.models.load_model(latest_model_path_to_save)
-
-            print("✅ Latest model downloaded from cloud storage")
-
-            return latest_model
-        except:
-            print(f"\n❌ No model found in GCS bucket {BUCKET_NAME}")
-
-            return None
+    except:
+        print(f"\n❌ No model found in GCS bucket {BUCKET_NAME}")
+        return None
