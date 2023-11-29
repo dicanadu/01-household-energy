@@ -19,10 +19,11 @@ This application will estimate your yearly energy consumption (in kWh).
 
 '''
 
-############### API ###########################
 
-# API:
+############ initiate parameters for API request ############
 params={}
+
+############### API ###########################
 
 ## test of the API to docker container on the cloud
 test_params = {'state_name': 'TX'}
@@ -368,9 +369,10 @@ def record_user_input(feature):
 
 ############## tabs - organize features by sections ###############
 
-tab_main, tab_household, tab_appliances = st.tabs(['About your home',
+tab_main, tab_household, tab_appliances, tab_admin = st.tabs(['About your home',
                                                    'Household characteristics',
-                                                    'Applicances'])
+                                                    'Appliances',
+                                                    'Admin'])
 
 #############################################
 ############### user input ##################
@@ -396,7 +398,7 @@ with tab_household:
     ###### section HOUSEHOLD CHARACTERISTICS ######
 
     household_features = ['SQFTEST', 'STORIES','YEARMADERANGE','NCOMBATH',
- 'NHAFBATH','TOTROOMS', 'WALLTYPE','ROOFTYPE','WINDOWS', 'SWIMPOOL',
+ 'NHAFBATH','TOTROOMS', 'WALLTYPE','ROOFTYPE','WINDOWS', 'SWIMPOOL', 'SOLAR',
  'SMARTMETER']
     for feature in household_features:
         record_user_input(feature)
@@ -405,15 +407,41 @@ with tab_household:
 with tab_appliances:
     st.subheader('Applicances')
 
-    appliance_features = list(set(all_features).difference(
-        set(main_features+household_features)))
-    for feature in appliance_features:
-        record_user_input(feature)
+    appliance_features = list(set(all_features).difference(set(main_features+household_features)))
+    #st.write([f'{k}:{label_dict[k]}' for k in appliance_features])
 
+    col1, col2, col3 = st.columns(3)
 
+    with col1:
+        st.subheader('Teleworking :computer:')
+        for feature in ['TELLWORK','TELLDAYS', 'DESKTOP','NUMLAPTOP']:
+            record_user_input(feature)
 
-### Parameters sent to the API:
-    #st.write(params)
+    with col2:
+        st.subheader('Living room :tv:')
+        for feature in ['TVCOLOR']:
+            record_user_input(feature)
+
+    with col3:
+        st.subheader('Chores :knife_fork_plate:')
+        for feature in ['DISHWASH','MICRO','CWASHER','DRYER']:
+            record_user_input(feature)
+
+    col4, col5, col6 = st.columns(3)
+
+    with col4:
+        st.subheader('Light bulbs :bulb:')
+        for feature in ['LGTIN1TO4','LGTIN4TO8','LGTINMORE8']:
+            record_user_input(feature)
+
+    with col5:
+        st.subheader('Heating and cooling')
+        for feature in ['AIRCOND','EQUIPM','HEATHOME', 'NUMPORTEL','NUMPORTAC']:
+            record_user_input(feature)
+
+with tab_admin:
+    st.subheader('Parameters sent to the API:')
+    st.write(params)
 
 
 
