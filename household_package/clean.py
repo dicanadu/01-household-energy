@@ -43,7 +43,7 @@ def clean_data(df):
     df["STORIES"] = df["STORIES"].replace(5,2)
 
     #Impute features
-    features_imputer2 = ['SWIMPOOL', 'TELLDAYS', 'NUMPORTEL', 'SOLAR']
+    features_imputer2 = ['SWIMPOOL', 'NUMPORTEL', 'SOLAR']
     features_imputer4 = ['SMARTMETER']
     to_ohe_encode = ['REGIONC', 'state_name','BA_climate','TYPEHUQ','YEARMADERANGE','WALLTYPE','ROOFTYPE','WINDOWS','EQUIPM']
 
@@ -58,7 +58,7 @@ def clean_data(df):
                                                 ('imputer_4',imputer_4, features_imputer4),
                                                 ('ohe', ohe, to_ohe_encode)],
                                                     remainder = "passthrough")
-    
+
     preprocessor.fit(df)
 
     cols = [x.split("__")[1] for x in preprocessor.get_feature_names_out()]
