@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 # from taxifare.ml_logic.preprocessor import preprocess_features
 from household_package.registry import load_model
+from household_package.data import clean_data, preprocessing, call_data_url
 import random
 
 app = FastAPI()
@@ -51,34 +52,29 @@ def predict(
     LGTIN4TO8: int,
     LGTINMORE8: int,
     NHSLDMEM: int,
-    SQFTEST: int
-):
-    #     pickup_datetime: str,  # 2013-07-06 17:18:00
-    #     pickup_longitude: float,    # -73.950655
-    #     pickup_latitude: float,     # 40.783282
-    #     dropoff_longitude: float,   # -73.984365
-    #     dropoff_latitude: float,    # 40.769802
-    #     passenger_count: int
-    # ):      # 1
-    # """
-    # Make a single course prediction.
-    # Assumes `pickup_datetime` is provided as a string by the user in "%Y-%m-%d %H:%M:%S" format
-    # Assumes `pickup_datetime` implicitly refers to the "US/Eastern" timezone (as any user in New York City would naturally write)
-    # """
-    # # X_pred = pd.DataFrame(locals())
-    X = {'pickup_datetime': pd.Timestamp(pickup_datetime, tz="US/Eastern"),
-                      'pickup_longitude': pickup_longitude,
-                      'pickup_latitude': pickup_latitude,
-                      'dropoff_longitude': dropoff_longitude,
-                      'dropoff_latitude': dropoff_latitude,
-                      'passenger_count': passenger_count}
+    SQFTEST: int):
+    """
+     Make a prediction based on user inputs.
+     Baseline model is the default and is pulled from the cloud.
+     """
+    ##### Create new dataframe from user inputs ######
 
-    X_pred = pd.DataFrame([X])
-    X_processed = preprocess_features(X_pred)
-    y_pred = app.state.model.predict(X_processed)
+    ## get all the passed arguments
+    user_inputs = locals().copy()
 
-    # return {'fare_amount': float(y_pred[0])}
-    y_pred = random.randint(1000, 5000)
+    ## make a dataframe
+    ## values of the dict should be lists
+    X_new = pd.DataFrame({k:[v] for k,v in user_inputs.items()})
+
+    ## clean the dataframe
+    X_new_clean = clean_data(X_new)
+
+    ## preprocessing - but we nee dX_train to fit it!
+    ## otherwise it should be part of the pipeline stored in the cloud!
+    X_train = clean_data(call_data_url()).drop(columns = 'KWH')
+    preprocessor = preprocessing(X_train)
+    X_new_processed = preprocessor.transform(X_new_clean)
+    y_pred = app.state.model.predict(X_new_processed)
 
     return {'kwh_prediction': int(y_pred)}
 
