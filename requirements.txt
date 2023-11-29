@@ -22,6 +22,7 @@ gcsfs
 google-cloud-storage
 mlflow
 s3fs
+google-cloud-bigquery
 
 # utilities
 #six>=1.14
