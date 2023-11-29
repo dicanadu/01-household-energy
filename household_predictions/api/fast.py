@@ -2,11 +2,11 @@ import pandas as pd
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 # from taxifare.ml_logic.preprocessor import preprocess_features
-# from taxifare.ml_logic.registry import load_model
+from household_package.registry import load_model
 import random
 
 app = FastAPI()
-# app.state.model = load_model()
+app.state.model = load_model()
 
 # Allowing all middleware is optional, but good practice for dev purposes
 app.add_middleware(
@@ -66,16 +66,16 @@ def predict(
     # Assumes `pickup_datetime` implicitly refers to the "US/Eastern" timezone (as any user in New York City would naturally write)
     # """
     # # X_pred = pd.DataFrame(locals())
-    # X = {'pickup_datetime': pd.Timestamp(pickup_datetime, tz="US/Eastern"),
-    #                   'pickup_longitude': pickup_longitude,
-    #                   'pickup_latitude': pickup_latitude,
-    #                   'dropoff_longitude': dropoff_longitude,
-    #                   'dropoff_latitude': dropoff_latitude,
-    #                   'passenger_count': passenger_count}
+    X = {'pickup_datetime': pd.Timestamp(pickup_datetime, tz="US/Eastern"),
+                      'pickup_longitude': pickup_longitude,
+                      'pickup_latitude': pickup_latitude,
+                      'dropoff_longitude': dropoff_longitude,
+                      'dropoff_latitude': dropoff_latitude,
+                      'passenger_count': passenger_count}
 
-    # X_pred = pd.DataFrame([X])
-    # X_processed = preprocess_features(X_pred)
-    # y_pred = app.state.model.predict(X_processed)
+    X_pred = pd.DataFrame([X])
+    X_processed = preprocess_features(X_pred)
+    y_pred = app.state.model.predict(X_processed)
 
     # return {'fare_amount': float(y_pred[0])}
     y_pred = random.randint(1000, 5000)
