@@ -8,7 +8,7 @@ from sklearn.preprocessing import OneHotEncoder
 
 def clean_data(df):
     """This set cleans the data to have it in the correct format before preprocessing"""
-
+    df = df.copy()
     #Maping features
     TYPEHUQ_map = {1: "Mobile", 2: "Single_detached",3: "Single_attached",
                    4: "Appartment_small" ,5: "Appartment_big"}
@@ -45,18 +45,15 @@ def clean_data(df):
     #Impute features
     features_imputer2 = ['SWIMPOOL', 'NUMPORTEL', 'SOLAR']
     features_imputer4 = ['SMARTMETER']
-    to_ohe_encode = ['REGIONC', 'state_name','BA_climate','TYPEHUQ','YEARMADERANGE','WALLTYPE','ROOFTYPE','WINDOWS','EQUIPM']
-
-    #imputer_2 = SimpleImputer(strategy='constant', missing_values=-2, fill_value=0)
-    #imputer_4 = SimpleImputer(strategy='constant', missing_values=-4, fill_value=0)
+    #to_ohe_encode = ['REGIONC', 'state_name','BA_climate','TYPEHUQ','YEARMADERANGE','WALLTYPE','ROOFTYPE','WINDOWS','EQUIPM']
 
     imputer_2 = SimpleImputer(strategy='constant', missing_values=-2, fill_value=0)
     imputer_4 = SimpleImputer(strategy='constant', missing_values=-4, fill_value=0)
-    ohe = OneHotEncoder(sparse_output=False)
+    #ohe = OneHotEncoder(sparse_output=False, handle_unknown='ignore')
 
     preprocessor = ColumnTransformer(transformers=[('imputer_2',imputer_2, features_imputer2),
-                                                ('imputer_4',imputer_4, features_imputer4),
-                                                ('ohe', ohe, to_ohe_encode)],
+                                                ('imputer_4',imputer_4, features_imputer4)],
+                                                #('ohe', ohe, to_ohe_encode)],
                                                     remainder = "passthrough")
 
     preprocessor.fit(df)

@@ -10,19 +10,19 @@ def save_model(model,type='baseline'):
     - if MODEL_TARGET='gcs', also persist it in your bucket on GCS at "models/{timestamp}.h5" --> unit 02 only
     - if MODEL_TARGET='mlflow', also persist it on MLflow instead of GCS (for unit 0703 only) --> unit 03 only
     """
-    try:
-        timestamp = time.strftime("%Y%m%d-%H%M%S")
-        file_path = f"../01-household-energy/model_h5/{type}/{type}_{timestamp}.pkl"
-        with open(file_path, 'wb') as file:
-            pickle.dump(model, file)
+    timestamp = time.strftime("%Y%m%d-%H%M%S")
+    file_path = f"../01-household-energy/model_h5/{type}/{type}_{timestamp}.pkl"
+    with open(file_path, 'wb') as file:
+        pickle.dump(model, file)
+    print("Locally saved .......... !!!")
 
-        print("Locally saved .......... !!!")
+    try:
         client = storage.Client()
         bucket = client.bucket(BUCKET_NAME)
         blob = bucket.blob(f"models/{type}_{timestamp}.pkl")
         blob.upload_from_filename(file_path)
         print("GCS saved .......... !!!")
-
+        #https://storage.cloud.google.com/01_household_energy/models/baseline_20231129-122043.pkl
 
         return None
     except:
