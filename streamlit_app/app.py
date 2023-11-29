@@ -164,8 +164,59 @@ states = {'AL': 'Alabama',
  'WI': 'Wisconsin',
  'WY': 'Wyoming'}
 
-# TODO state to region
+# state to region mapper
 
+state_to_region={'New Mexico': 'WEST',
+ 'Arkansas': 'SOUTH',
+ 'South Carolina': 'SOUTH',
+ 'New Jersey': 'NORTHEAST',
+ 'Texas': 'SOUTH',
+ 'Oklahoma': 'SOUTH',
+ 'Mississippi': 'SOUTH',
+ 'District of Columbia': 'SOUTH',
+ 'Arizona': 'WEST',
+ 'California': 'WEST',
+ 'Louisiana': 'SOUTH',
+ 'Minnesota': 'MIDWEST',
+ 'Vermont': 'NORTHEAST',
+ 'Rhode Island': 'NORTHEAST',
+ 'Illinois': 'MIDWEST',
+ 'Maine': 'NORTHEAST',
+ 'South Dakota': 'MIDWEST',
+ 'Massachusetts': 'NORTHEAST',
+ 'Florida': 'SOUTH',
+ 'Ohio': 'MIDWEST',
+ 'Nebraska': 'MIDWEST',
+ 'Virginia': 'SOUTH',
+ 'Wyoming': 'WEST',
+ 'Pennsylvania': 'NORTHEAST',
+ 'Hawaii': 'WEST',
+ 'New Hampshire': 'NORTHEAST',
+ 'Michigan': 'MIDWEST',
+ 'Maryland': 'SOUTH',
+ 'New York': 'NORTHEAST',
+ 'Colorado': 'WEST',
+ 'North Carolina': 'SOUTH',
+ 'Kentucky': 'SOUTH',
+ 'North Dakota': 'MIDWEST',
+ 'Georgia': 'SOUTH',
+ 'West Virginia': 'SOUTH',
+ 'Oregon': 'WEST',
+ 'Missouri': 'MIDWEST',
+ 'Utah': 'WEST',
+ 'Connecticut': 'NORTHEAST',
+ 'Tennessee': 'SOUTH',
+ 'Wisconsin': 'MIDWEST',
+ 'Idaho': 'WEST',
+ 'Nevada': 'WEST',
+ 'Washington': 'WEST',
+ 'Indiana': 'MIDWEST',
+ 'Delaware': 'SOUTH',
+ 'Iowa': 'MIDWEST',
+ 'Alaska': 'WEST',
+ 'Alabama': 'SOUTH',
+ 'Montana': 'WEST',
+ 'Kansas': 'MIDWEST'}
 
 ########## separate features by type ##############
 
@@ -175,16 +226,102 @@ numeric_features = ['NCOMBATH', 'NHAFBATH', 'TOTROOMS', 'NUMFRIG', 'MICRO', 'TVC
 num_checkbox_features = ['TYPEHUQ', 'STORIES', 'YEARMADERANGE', 'WALLTYPE', 'ROOFTYPE', 'WINDOWS', 'SWIMPOOL', 'DISHWASH', 'CWASHER', 'DRYER', 'TELLWORK', 'HEATHOME', 'EQUIPM', 'AIRCOND', 'SMARTMETER', 'SOLAR']
 numeric_features_dropdown = ['TELLDAYS', 'NUMPORTEL', 'NUMPORTAC']
 all_features = geo_features+numeric_features+num_checkbox_features+numeric_features_dropdown#+selectbox_features
+
+
 ########### dictionary of mappings ################
 
-mapped_features={}
-for feature in num_checkbox_features:
-    mapped_features[feature]=dict(val.split(' ', 1)[::-1] for val in values_dict.get(feature).split('\n'))
-for feature in numeric_features_dropdown:
-    str_range, text  = values_dict[feature].split('\n')
-    d = {str(k):str(k) for k in range(int(str_range.split(' - ')[-1])+1)}
-    d.update({text.split(' ',1)[1]:text.split(' ',1)[0]})
-    mapped_features[feature] = d
+mapped_features={'TYPEHUQ': {'Mobile home': '1',
+  'Single-family house detached from any other house ': '2',
+  'Single-family house attached to one or more other houses (for example: duplex, row house, or townhome)': '3',
+  'Apartment in a building with 2 to 4 units': '4',
+  'Apartment in a building with 5 or more units': '5'},
+ 'STORIES': {'One story': '1',
+  'Two stories': '2',
+  'Three stories': '3',
+  'Four or more stories': '4',
+  'Split-level': '5',
+  'Not applicable': '-2'},
+ 'YEARMADERANGE': {'Before 1950': '1',
+  '1950 to 1959': '2',
+  '1960 to 1969': '3',
+  '1970 to 1979': '4',
+  '1980 to 1989': '5',
+  '1990 to 1999': '6',
+  '2000 to 2009': '7',
+  '2010 to 2015': '8',
+  '2016 to 2020': '9'},
+ 'WALLTYPE': {'Brick': '1',
+  'Wood': '2',
+  'Siding (aluminum, fiber cement, vinyl, or steel) ': '3',
+  'Stucco': '4',
+  'Shingle (composition)': '5',
+  'Stone ': '6',
+  'Concrete block ': '7',
+  'Other': '99'},
+ 'ROOFTYPE': {'Ceramic or clay tiles': '1',
+  'Wood shingles/shakes': '2',
+  'Metal': '3',
+  'Slate or synthetic slate': '4',
+  'Shingles (composition or asphalt)': '5',
+  'Concrete tiles': '6',
+  'Other': '99',
+  'Not applicable': '-2'},
+ 'WINDOWS': {'1 or 2 windows': '1',
+  '3 to 5 windows': '2',
+  '6 to 9 windows': '3',
+  '10 to 15 windows': '4',
+  '16 to 19 windows': '5',
+  '20 to 29 windows': '6',
+  '30 or more windows': '7'},
+ 'SWIMPOOL': {'Yes': '1', 'No': '0', 'Not applicable': '-2'},
+ 'DISHWASH': {'Yes': '1', 'No': '0'},
+ 'CWASHER': {'Yes': '1', 'No': '0'},
+ 'DRYER': {'Yes': '1', 'No': '0'},
+ 'TELLWORK': {'Yes': '1', 'No': '0'},
+ 'TELLDAYS': {'0': '0',
+  '1': '1',
+  '2': '2',
+  '3': '3',
+  '4': '4',
+  '5': '5',
+  '6': '6',
+  '7': '7',
+  ' Not applicable': '-2'},
+ 'HEATHOME': {'Yes': '1', 'No': '0'},
+ 'EQUIPM': {'Central furnace ': '3',
+  'Steam or hot water system with radiators or pipes ': '2',
+  'Central heat pump': '4',
+  'Ductless heat pump, also known as a “mini-split”': '13',
+  'Built-in electric units installed in walls, ceilings, baseboards, or floors': '5',
+  'Built-in room heater burning gas or oil': '7',
+  'Wood or pellet stove ': '8',
+  'Portable electric heaters': '10',
+  'Other ': '99',
+  'Not applicable': '-2'},
+ 'NUMPORTEL': {'0': '0',
+  '1': '1',
+  '2': '2',
+  '3': '3',
+  '4': '4',
+  '5': '5',
+  '6': '6',
+  '7': '7',
+  '8': '8',
+  '9': '9',
+  'Not applicable': '-2'},
+ 'AIRCOND': {'Yes': '1', 'No': '0'},
+ 'NUMPORTAC': {'0': '0',
+  '1': '1',
+  '2': '2',
+  '3': '3',
+  '4': '4',
+  '5': '5',
+  '6': '6',
+  '7': '7',
+  '8': '8',
+  'Not applicable': '-2'},
+ 'SMARTMETER': {'Yes': '1', 'No': '0', "Don't Know": '-4'},
+ 'SOLAR': {'Yes': '1', 'No': '0', 'Not applicable': '-2'}}
 
 
 ############# functions ############
@@ -205,8 +342,7 @@ def record_user_input(feature):
     if feature=='state_name':
         state_postal = st.selectbox('Select your state:', states.keys())
         params['state_name'] = states.get(state_postal)
-    # TODO derive region from state name 'REGIONC'
-
+        params['REGIONC'] = state_to_region.get(params['state_name'])
 
     ##### features that need a dropdown text #####
     if feature in selectbox_features:
