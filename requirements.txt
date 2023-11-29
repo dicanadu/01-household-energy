@@ -8,6 +8,11 @@ wheel>=0.29
 numpy
 pandas
 scikit-learn
+<<<<<<< HEAD
+=======
+seaborn
+pickle
+>>>>>>> 4b5a0eace43bdff7a5ab7308f93445d0c534cf30
 
 # tests/linter
 black
@@ -22,12 +27,16 @@ google-cloud-storage
 google-cloud-bigquery
 mlflow
 s3fs
+<<<<<<< HEAD
 # adding the below packages for api
 fastapi
 pytz
 uvicorn
 python-dotenv
 docker
+=======
+google-cloud-bigquery
+>>>>>>> 4b5a0eace43bdff7a5ab7308f93445d0c534cf30
 
 # utilities
 six>=1.14
