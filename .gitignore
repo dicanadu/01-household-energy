@@ -1,0 +1,14 @@
+*.egg-info
+.coverage
+.ipynb_checkpoints
+.DS_Store
+raw_data/
+*.csv
+**/__pycache__/
+.env
+Untitled1.ipynb
+Untitled2.ipynb
+requirements_prod.txt
+.env.yaml
+tests/
+docker_build.txt
