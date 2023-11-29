@@ -58,7 +58,7 @@ def clean_data(df):
                                                 ('imputer_4',imputer_4, features_imputer4),
                                                 ('ohe', ohe, to_ohe_encode)],
                                                     remainder = "passthrough")
-    
+
     preprocessor.fit(df)
 
     cols = [x.split("__")[1] for x in preprocessor.get_feature_names_out()]
