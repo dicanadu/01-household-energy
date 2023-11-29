@@ -62,8 +62,8 @@ reinstall_package:
 	@pip uninstall -y household_prediction || :
 	@pip install -e .
 
-run_api:
-	uvicorn api.fast:app --reload
+reload_env:
+	direnv reload
 
 # ----------------------------------
 #      		DOCKER ACTIONS
