@@ -6,7 +6,6 @@ raw_data/
 *.csv
 **/__pycache__/
 .env
-Untitled.ipynb
 Untitled1.ipynb
 Untitled2.ipynb
 requirements_prod.txt
