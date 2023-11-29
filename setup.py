@@ -7,11 +7,7 @@ requirements = [x.strip() for x in content if 'git+' not in x]
 
 setup(name='01-household-energy',
       version="1.0",
-      description="Predict Household Energy Consumption",
+      description="Project Description",
       packages=find_packages(),
       install_requires=requirements,
-      test_suite='tests',
-      # include_package_data: to install data from MANIFEST.in
-      include_package_data=True,
-    #   scripts=['scripts/01-household-energy-run'],
-      zip_safe=False)
+      test_suite='tests')
