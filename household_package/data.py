@@ -25,12 +25,17 @@ def call_data_cloud():
         FROM `{PROJECT}.{DATASET}.{TABLE}`
         """
 
+    columns = ["REGIONC", "state_name", "BA_climate", "TYPEHUQ", "STORIES", "YEARMADERANGE", "NCOMBATH", "NHAFBATH", "TOTROOMS", "WALLTYPE", "ROOFTYPE", "WINDOWS",
+           "SWIMPOOL", "NUMFRIG", "MICRO", "DISHWASH", "CWASHER", "DRYER", "TVCOLOR", "DESKTOP", "NUMLAPTOP",
+           "TELLWORK","HEATHOME", "EQUIPM", "NUMPORTEL", "AIRCOND", "LGTIN1TO4", "LGTIN4TO8", "LGTINMORE8", "SMARTMETER", "SOLAR", "NHSLDMEM", "SQFTEST",
+          "KWH"]
+
     client = bigquery.Client()
     query_job = client.query(query)
     result = query_job.result()
     df = result.to_dataframe()
 
-    return df
+    return df[columns]
 
 if __name__ == '__main__':
     df = call_data_url()

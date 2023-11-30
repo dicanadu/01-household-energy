@@ -6,8 +6,16 @@ from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder
 
-def clean_data(df):
+def clean_data(df,min_perc=0.005, max_perc=0.995):
     """This set cleans the data to have it in the correct format before preprocessing"""
+    df = df.copy()
+
+    #Get rid of outliers#
+    percentile_min = df['KWH'].quantile(min_perc)
+    percentile_max = df['KWH'].quantile(max_perc)
+
+    # Filter the DataFrame based on the specified percentiles
+    df = df[(df['KWH'] >= percentile_min) & (df['KWH'] <= percentile_max)]
 
     #Maping features
     TYPEHUQ_map = {1: "Mobile", 2: "Single_detached",3: "Single_attached",
@@ -39,34 +47,28 @@ def clean_data(df):
     df["TOTAL_LIGHT"] = df["LGTIN1TO4"] + df["LGTIN4TO8"] + df["LGTINMORE8"]
     df.drop( ["LGTIN1TO4", "LGTIN4TO8", "LGTINMORE8"] ,axis=1, inplace = True)
 
+    df["STORIES"] = df["STORIES"].replace(-2,1)
+    df["STORIES"] = df["STORIES"].replace(5,2)
+
     #Impute features
-    features_to_impute = ['SWIMPOOL', 'TELLDAYS', 'NUMPORTEL', 'SMARTMETER', 'SOLAR']
-    to_ohe_encode = ['REGIONC', 'state_name','BA_climate','TYPEHUQ','YEARMADERANGE','WALLTYPE','ROOFTYPE','WINDOWS','EQUIPM']
+    features_imputer2 = ['SWIMPOOL', 'NUMPORTEL', 'SOLAR']
+    features_imputer4 = ['SMARTMETER']
+    #to_ohe_encode = ['REGIONC', 'state_name','BA_climate','TYPEHUQ','YEARMADERANGE','WALLTYPE','ROOFTYPE','WINDOWS','EQUIPM']
 
-    #imputer_2 = SimpleImputer(strategy='constant', missing_values=-2, fill_value=0)
-    #imputer_4 = SimpleImputer(strategy='constant', missing_values=-4, fill_value=0)
+    imputer_2 = SimpleImputer(strategy='constant', missing_values=-2, fill_value=0)
+    imputer_4 = SimpleImputer(strategy='constant', missing_values=-4, fill_value=0)
+    #ohe = OneHotEncoder(sparse_output=False, handle_unknown='ignore')
 
-    pipe = Pipeline(
-        steps=[('imputer_2',SimpleImputer(strategy='constant',
-                                          missing_values=-2, fill_value=0)),
-            ('imputer_4',SimpleImputer(strategy='constant',
-                                       missing_values=-4, fill_value=0)),
-            ('imputer_stories_missing',SimpleImputer(strategy='constant',
-                                                     missing_values=-2,
-                                                     fill_value=1)),
-            ('imputer_stories_5',SimpleImputer(strategy='constant',
-                                               missing_values=5, fill_value=2)),
-            ("ohe", OneHotEncoder(sparse_output=False) )
-            ])
+    preprocessor = ColumnTransformer(transformers=[('imputer_2',imputer_2, features_imputer2),
+                                                ('imputer_4',imputer_4, features_imputer4)],
+                                                #('ohe', ohe, to_ohe_encode)],
+                                                    remainder = "passthrough")
 
-    preprocessor = ColumnTransformer(transformers=[('imputer_2',pipe, features_to_impute),
-                                                ('imputer_4',pipe, features_to_impute),
-                                                ('imputer_stories_missing', pipe, ['STORIES']),
-                                                ('imputer_stories_5', pipe, ['STORIES']),
-                                                ('ohe', pipe , to_ohe_encode)],
-                                    remainder = "passthrough")
+    preprocessor.fit(df)
 
-    df_clean = pd.DataFrame(preprocessor.fit_transform(df),
-                       columns = preprocessor.get_feature_names_out())
+    cols = [x.split("__")[1] for x in preprocessor.get_feature_names_out()]
+
+    df_clean = pd.DataFrame(preprocessor.transform(df),
+                       columns = cols)
 
     return df_clean

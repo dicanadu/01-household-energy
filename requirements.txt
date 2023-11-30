@@ -9,7 +9,7 @@ numpy
 pandas
 scikit-learn
 seaborn
-pickle
+xgboost
 
 # tests/linter
 black

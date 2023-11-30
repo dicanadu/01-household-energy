@@ -6,9 +6,17 @@ from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder
 
-def clean_data(df):
+def clean_data(df,min_perc=0.005, max_perc=0.995):
     """This set cleans the data to have it in the correct format before preprocessing"""
     df = df.copy()
+
+    #Get rid of outliers#
+    percentile_min = df['KWH'].quantile(min_perc)
+    percentile_max = df['KWH'].quantile(max_perc)
+
+    # Filter the DataFrame based on the specified percentiles
+    df = df[(df['KWH'] >= percentile_min) & (df['KWH'] <= percentile_max)]
+
     #Maping features
     TYPEHUQ_map = {1: "Mobile", 2: "Single_detached",3: "Single_attached",
                    4: "Appartment_small" ,5: "Appartment_big"}
