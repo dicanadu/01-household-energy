@@ -65,11 +65,10 @@ async def predict(request: Request
      """
 
     ### get params
-
     params = dict(request.query_params)
 
     ##### Create new dataframe from user inputs ######
-    X_new = pd.DataFrame({k:[v] for k,v in params.items()})
+    X_new = pd.DataFrame({k:[int(v) if v.isdigit() else v] for k,v in params.items()})
 
     ## clean the dataframe
     X_new_clean = clean_data(X_new)
