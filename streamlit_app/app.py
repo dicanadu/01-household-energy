@@ -41,7 +41,6 @@ def api_call(url, params):
 label_dict = {'REGIONC': 'Census Region',
  'state_name': 'State Name',
  'BA_climate': 'Building America Climate Zone',
- 'IECC_climate_code': '2012 International Energy Conservation Code climate code',
  'TYPEHUQ': 'Type of housing unit',
  'STORIES': 'Number of stories in a single-family home',
  'YEARMADERANGE': 'Range when housing unit was built',
@@ -53,7 +52,7 @@ label_dict = {'REGIONC': 'Census Region',
  'WINDOWS': 'Number of windows',
  'SWIMPOOL': 'Has swimming pool',
  'NUMFRIG': 'Number of refrigerators used',
- 'MICRO': 'Number of microwaves',
+ 'MICRO': 'Number of microwaves ',
  'DISHWASH': 'Has dishwasher',
  'CWASHER': 'Has clothes washer in home',
  'DRYER': 'Has clothes dryer in home',
@@ -61,12 +60,10 @@ label_dict = {'REGIONC': 'Census Region',
  'DESKTOP': 'Number of desktop computers used',
  'NUMLAPTOP': 'Number of laptop computers used',
  'TELLWORK': 'Any household member teleworking',
- 'TELLDAYS': 'Number of days teleworking in the past week',
  'HEATHOME': 'Space heating equipment used',
  'EQUIPM': 'Main space heating equipment type',
  'NUMPORTEL': 'Number of portable electric heaters used',
  'AIRCOND': 'Air conditioning equipment used',
- 'NUMPORTAC': 'Number of portable air conditioners used',
  'LGTIN1TO4': 'Number of inside light bulbs turned on 1 to 4 hours per day',
  'LGTIN4TO8': 'Number of inside light bulbs turned on 4 to 8 hours per day',
  'LGTINMORE8': 'Number of inside light bulbs turned on more than 8 hours per day',
@@ -78,7 +75,6 @@ label_dict = {'REGIONC': 'Census Region',
 values_dict = {'REGIONC': 'Midwest\nNortheast\nSouth\nWest',
  'state_name': 'state_dictionary!A1',
  'BA_climate': 'Cold\nHot-Dry\nHot-Humid\nMarine\nMixed-Dry\nMixed-Humid\nSubarctic\nVery-Cold',
- 'IECC_climate_code': '1A\n2A\n2B\n3A\n3B\n3C\n4A\n4B\n4C\n5A\n5B\n5C\n6A\n6B\n7A\n7AK\n7B\n8AK',
  'TYPEHUQ': '1 Mobile home\n2 Single-family house detached from any other house \n3 Single-family house attached to one or more other houses (for example: duplex, row house, or townhome)\n4 Apartment in a building with 2 to 4 units\n5 Apartment in a building with 5 or more units',
  'STORIES': '1 One story\n2 Two stories\n3 Three stories\n4 Four or more stories\n5 Split-level\n-2 Not applicable',
  'YEARMADERANGE': '1 Before 1950\n2 1950 to 1959\n3 1960 to 1969\n4 1970 to 1979\n5 1980 to 1989\n6 1990 to 1999\n7 2000 to 2009\n8 2010 to 2015\n9 2016 to 2020',
@@ -98,12 +94,10 @@ values_dict = {'REGIONC': 'Midwest\nNortheast\nSouth\nWest',
  'DESKTOP': '0 - 8',
  'NUMLAPTOP': '0 - 20',
  'TELLWORK': '1 Yes\n0 No',
- 'TELLDAYS': '0 - 7\n-2  Not applicable',
  'HEATHOME': '1 Yes\n0 No',
  'EQUIPM': '3 Central furnace \n2 Steam or hot water system with radiators or pipes \n4 Central heat pump\n13 Ductless heat pump, also known as a “mini-split”\n5 Built-in electric units installed in walls, ceilings, baseboards, or floors\n7 Built-in room heater burning gas or oil\n8 Wood or pellet stove \n10 Portable electric heaters\n99 Other \n-2 Not applicable',
  'NUMPORTEL': '1 - 9\n-2 Not applicable',
  'AIRCOND': '1 Yes\n0 No',
- 'NUMPORTAC': '1 - 8\n-2 Not applicable',
  'LGTIN1TO4': '0 - 90',
  'LGTIN4TO8': '0 - 84',
  'LGTINMORE8': '0 - 99',
@@ -219,6 +213,59 @@ state_to_region={'New Mexico': 'WEST',
  'Montana': 'WEST',
  'Kansas': 'MIDWEST'}
 
+# state to most frequent climate mapper
+
+climate_dict = {'Alabama': 'Hot-Humid',
+ 'Alaska': 'Subarctic',
+ 'Arizona': 'Cold',
+ 'Arkansas': 'Hot-Humid',
+ 'California': 'Cold',
+ 'Colorado': 'Cold',
+ 'Connecticut': 'Cold',
+ 'Delaware': 'Mixed-Humid',
+ 'District of Columbia': 'Mixed-Humid',
+ 'Florida': 'Hot-Humid',
+ 'Georgia': 'Hot-Humid',
+ 'Hawaii': 'Hot-Humid',
+ 'Idaho': 'Cold',
+ 'Illinois': 'Cold',
+ 'Indiana': 'Cold',
+ 'Iowa': 'Cold',
+ 'Kansas': 'Cold',
+ 'Kentucky': 'Mixed-Humid',
+ 'Louisiana': 'Hot-Humid',
+ 'Maine': 'Cold',
+ 'Maryland': 'Cold',
+ 'Massachusetts': 'Cold',
+ 'Michigan': 'Cold',
+ 'Minnesota': 'Cold',
+ 'Mississippi': 'Hot-Humid',
+ 'Missouri': 'Cold',
+ 'Montana': 'Cold',
+ 'Nebraska': 'Cold',
+ 'Nevada': 'Cold',
+ 'New Hampshire': 'Cold',
+ 'New Jersey': 'Cold',
+ 'New Mexico': 'Cold',
+ 'New York': 'Cold',
+ 'North Carolina': 'Cold',
+ 'North Dakota': 'Cold',
+ 'Ohio': 'Cold',
+ 'Oklahoma': 'Mixed-Humid',
+ 'Oregon': 'Cold',
+ 'Pennsylvania': 'Cold',
+ 'Rhode Island': 'Cold',
+ 'South Carolina': 'Hot-Humid',
+ 'South Dakota': 'Cold',
+ 'Tennessee': 'Mixed-Humid',
+ 'Texas': 'Hot-Dry',
+ 'Utah': 'Cold',
+ 'Vermont': 'Cold',
+ 'Virginia': 'Mixed-Humid',
+ 'Washington': 'Cold',
+ 'West Virginia': 'Cold',
+ 'Wisconsin': 'Cold',
+ 'Wyoming': 'Cold'}
 
 # feature to region mapper
 section_dict = {'ADMIN': ['DOEID', 'BA_climate', 'IECC_climate_code', 'UATYP10'],
@@ -1011,11 +1058,13 @@ section_dict = {'ADMIN': ['DOEID', 'BA_climate', 'IECC_climate_code', 'UATYP10']
 
 ########## separate features by type ##############
 
-geo_features = ['state_name']#, 'REGIONC']
-selectbox_features = ['BA_climate', 'IECC_climate_code']
-numeric_features = ['NCOMBATH', 'NHAFBATH', 'TOTROOMS', 'NUMFRIG', 'MICRO', 'TVCOLOR', 'DESKTOP', 'NUMLAPTOP', 'LGTIN1TO4', 'LGTIN4TO8', 'LGTINMORE8', 'NHSLDMEM', 'SQFTEST']
+geo_features = ['state_name']#, 'REGIONC'] # inferred
+
+selectbox_features=[]
+numeric_features=['NCOMBATH', 'NHAFBATH', 'TOTROOMS', 'NUMFRIG', 'MICRO', 'TVCOLOR', 'DESKTOP', 'NUMLAPTOP', 'LGTIN1TO4', 'LGTIN4TO8', 'LGTINMORE8', 'NHSLDMEM', 'SQFTEST']
+numeric_features_dropdown = ['NUMPORTEL']
 num_checkbox_features = ['TYPEHUQ', 'STORIES', 'YEARMADERANGE', 'WALLTYPE', 'ROOFTYPE', 'WINDOWS', 'SWIMPOOL', 'DISHWASH', 'CWASHER', 'DRYER', 'TELLWORK', 'HEATHOME', 'EQUIPM', 'AIRCOND', 'SMARTMETER', 'SOLAR']
-numeric_features_dropdown = ['NUMPORTEL'] #'TELLDAYS', 'NUMPORTAC'
+
 all_features = geo_features+numeric_features+num_checkbox_features+numeric_features_dropdown#+selectbox_features
 
 
@@ -1069,15 +1118,6 @@ mapped_features={'TYPEHUQ': {'Mobile home': '1',
  'CWASHER': {'Yes': '1', 'No': '0'},
  'DRYER': {'Yes': '1', 'No': '0'},
  'TELLWORK': {'Yes': '1', 'No': '0'},
- 'TELLDAYS': {'0': '0',
-  '1': '1',
-  '2': '2',
-  '3': '3',
-  '4': '4',
-  '5': '5',
-  '6': '6',
-  '7': '7',
-  ' Not applicable': '-2'},
  'HEATHOME': {'Yes': '1', 'No': '0'},
  'EQUIPM': {'Central furnace ': '3',
   'Steam or hot water system with radiators or pipes ': '2',
@@ -1101,16 +1141,6 @@ mapped_features={'TYPEHUQ': {'Mobile home': '1',
   '9': '9',
   'Not applicable': '-2'},
  'AIRCOND': {'Yes': '1', 'No': '0'},
- 'NUMPORTAC': {'0': '0',
-  '1': '1',
-  '2': '2',
-  '3': '3',
-  '4': '4',
-  '5': '5',
-  '6': '6',
-  '7': '7',
-  '8': '8',
-  'Not applicable': '-2'},
  'SMARTMETER': {'Yes': '1', 'No': '0', "Don't Know": '-4'},
  'SOLAR': {'Yes': '1', 'No': '0', 'Not applicable': '-2'}}
 
@@ -1134,6 +1164,7 @@ def record_user_input(feature):
         state_postal = st.selectbox('Select your state:', states.keys())
         params['state_name'] = states.get(state_postal)
         params['REGIONC'] = state_to_region.get(params['state_name'])
+        params['BA_climate'] = climate_dict.get(params['state_name'])
 
     ##### features that need a dropdown text #####
     if feature in selectbox_features:
@@ -1176,7 +1207,7 @@ with tab_main:
     main_features = ['TYPEHUQ','NHSLDMEM', 'state_name']
     for feature in main_features:
         record_user_input(feature)
-
+        #pass
 
     ###### section ADMIN ######
     # right now don't know how to input climate or climate code as a user
@@ -1188,16 +1219,17 @@ with tab_household:
     ###### section HOUSEHOLD CHARACTERISTICS ######
 
     household_features = ['SQFTEST', 'STORIES','YEARMADERANGE','NCOMBATH',
- 'NHAFBATH','TOTROOMS', 'WALLTYPE','ROOFTYPE','WINDOWS', 'SWIMPOOL', 'SOLAR',
- 'SMARTMETER']
+                            'NHAFBATH','TOTROOMS', 'WALLTYPE','ROOFTYPE','WINDOWS', 'SWIMPOOL', 'SOLAR',
+                            'SMARTMETER']
     for feature in household_features:
         record_user_input(feature)
+        #pass
 
 
 with tab_appliances:
     st.subheader('Applicances')
 
-    appliance_features = list(set(all_features).difference(set(main_features+household_features)))
+    #appliance_features = list(set(all_features).difference(set(main_features+household_features)))
     #st.write([f'{k}:{label_dict[k]}' for k in appliance_features])
 
     col1, col2, col3 = st.columns(3)
@@ -1206,16 +1238,19 @@ with tab_appliances:
         st.subheader('Teleworking :computer:')
         for feature in ['TELLWORK', 'DESKTOP','NUMLAPTOP']:
             record_user_input(feature)
+            #pass
 
     with col2:
         st.subheader('Living room :tv:')
         for feature in ['TVCOLOR']:
             record_user_input(feature)
+            #pass
 
     with col3:
         st.subheader('Chores :knife_fork_plate:')
         for feature in ['DISHWASH','MICRO','NUMFRIG', 'CWASHER','DRYER']:
             record_user_input(feature)
+            #pass
 
     col4, col5, col6 = st.columns(3)
 
@@ -1223,11 +1258,14 @@ with tab_appliances:
         st.subheader('Light bulbs :bulb:')
         for feature in ['LGTIN1TO4','LGTIN4TO8','LGTINMORE8']:
             record_user_input(feature)
+            #pass
 
     with col5:
         st.subheader('Heating and cooling')
-        for feature in ['AIRCOND','EQUIPM','HEATHOME', 'NUMPORTEL']: #,'NUMPORTAC'
+        for feature in ['AIRCOND','EQUIPM','HEATHOME']: # , 'NUMPORTEL'
+            #st.write(feature)
             record_user_input(feature)
+            #pass
 
 with tab_admin:
     st.subheader('Parameters sent to the API:')
@@ -1236,6 +1274,8 @@ with tab_admin:
 
 
 ############# callback to calculate kWh ################
+
+st.divider()
 
 if st.button('Estimate my consumption'):
     pred_kwh = api_call(url, params=test_params)
