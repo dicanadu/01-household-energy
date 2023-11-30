@@ -1015,7 +1015,7 @@ geo_features = ['state_name']#, 'REGIONC']
 selectbox_features = ['BA_climate', 'IECC_climate_code']
 numeric_features = ['NCOMBATH', 'NHAFBATH', 'TOTROOMS', 'NUMFRIG', 'MICRO', 'TVCOLOR', 'DESKTOP', 'NUMLAPTOP', 'LGTIN1TO4', 'LGTIN4TO8', 'LGTINMORE8', 'NHSLDMEM', 'SQFTEST']
 num_checkbox_features = ['TYPEHUQ', 'STORIES', 'YEARMADERANGE', 'WALLTYPE', 'ROOFTYPE', 'WINDOWS', 'SWIMPOOL', 'DISHWASH', 'CWASHER', 'DRYER', 'TELLWORK', 'HEATHOME', 'EQUIPM', 'AIRCOND', 'SMARTMETER', 'SOLAR']
-numeric_features_dropdown = ['TELLDAYS', 'NUMPORTEL', 'NUMPORTAC']
+numeric_features_dropdown = ['NUMPORTEL'] #'TELLDAYS', 'NUMPORTAC'
 all_features = geo_features+numeric_features+num_checkbox_features+numeric_features_dropdown#+selectbox_features
 
 
@@ -1204,7 +1204,7 @@ with tab_appliances:
 
     with col1:
         st.subheader('Teleworking :computer:')
-        for feature in ['TELLWORK','TELLDAYS', 'DESKTOP','NUMLAPTOP']:
+        for feature in ['TELLWORK', 'DESKTOP','NUMLAPTOP']:
             record_user_input(feature)
 
     with col2:
@@ -1214,7 +1214,7 @@ with tab_appliances:
 
     with col3:
         st.subheader('Chores :knife_fork_plate:')
-        for feature in ['DISHWASH','MICRO','CWASHER','DRYER']:
+        for feature in ['DISHWASH','MICRO','NUMFRIG', 'CWASHER','DRYER']:
             record_user_input(feature)
 
     col4, col5, col6 = st.columns(3)
@@ -1226,7 +1226,7 @@ with tab_appliances:
 
     with col5:
         st.subheader('Heating and cooling')
-        for feature in ['AIRCOND','EQUIPM','HEATHOME', 'NUMPORTEL','NUMPORTAC']:
+        for feature in ['AIRCOND','EQUIPM','HEATHOME', 'NUMPORTEL']: #,'NUMPORTAC'
             record_user_input(feature)
 
 with tab_admin:
