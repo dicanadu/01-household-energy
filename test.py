@@ -34,8 +34,10 @@ params = {
   "LGTINMORE8": 0,
   "AIRCOND": 1,
   "EQUIPM": 3,
-  "HEATHOME": 1
+  "HEATHOME": 1,
+  "NUMPORTEL": 0
 }
+
 
 response = requests.get(url, params=params)
 result = response.json() #=> {wait: 64}
