@@ -26,14 +26,16 @@ params={}
 ############### API ###########################
 
 ## test of the API to docker container on the cloud
-test_params = {'state_name': 'TX'}
-url='https://householdpredictions-jaiabuy6eq-ew.a.run.app/predict'
+#test_params = {'state_name': 'TX'}
+#url='https://householdpredictions-jaiabuy6eq-ew.a.run.app/predict'
+
+url='https://ushouseholdenergy-jaiabuy6eq-ew.a.run.app/predict'
 
 #@st.cache_data(ttl=3600) # cache data for 1 hour
 def api_call(url, params):
     response=requests.get(url,params).json()
     #output prediction:
-    return response.get("kwh_prediction")
+    return response#.get("kwh_prediction")
 
 
 ########### hard-coded constants ###############
@@ -1278,7 +1280,8 @@ with tab_admin:
 st.divider()
 
 if st.button('Estimate my consumption'):
-    pred_kwh = api_call(url, params=test_params)
-    st.write(f'''
-             Your estimated consumption:\n
-             {pred_kwh} kWh''')
+    pred_kwh = api_call(url, params=params) #test_params
+    st.write(pred_kwh #f'''
+             #Your estimated consumption:\n
+             #{pred_kwh} kWh'''
+             )
