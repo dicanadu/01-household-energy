@@ -69,8 +69,10 @@ reload_env:
 #      		DOCKER ACTIONS
 # ----------------------------------
 # .DEFAULT_GOAL := default
-build_docker_prod:
+build_docker_prod_mac:
 	docker build --platform linux/amd64 -t ${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT}/household-predictions/${GAR_IMAGE}:prod
+build_docker_prod:
+        docker build -t ${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT}/household-predictions/${GAR_IMAGE}:prod
 
 push_to_artifact:
 	docker push ${GCP_REGION}-docker.pkg.dev/${GCP_PROJECT}/household-predictions/${GAR_IMAGE}:prod

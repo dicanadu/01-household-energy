@@ -5,7 +5,7 @@ with open('requirements.txt') as f:
     content = f.readlines()
 requirements = [x.strip() for x in content if 'git+' not in x]
 
-setup(name='01-household-energy',
+setup(name='household_package',
       version="1.0",
       description="Predict Household Energy Consumption",
       packages=find_packages(),

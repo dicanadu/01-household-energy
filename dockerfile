@@ -14,11 +14,12 @@
 
   # First, pip install dependencies
   RUN pip install --upgrade pip
-  COPY ./requirements.txt /prod/requirements.txt
+  COPY ./requirements_prod.txt /prod/requirements.txt
   RUN pip install -r requirements.txt
 
-  # Then only, install api!
+  # Install our packages (for some reason they are two now)
   COPY household_predictions household_predictions
+  COPY household_package household_package
   COPY ./setup.py /prod/setup.py
   RUN pip install .
 
