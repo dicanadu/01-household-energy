@@ -1,6 +1,7 @@
 import requests
 
-url = 'http://localhost:8000/predict'
+#url = 'http://localhost:8000/predict'
+url = 'http://localhost:8000/getUserInfo'
 
 params = {
   "TYPEHUQ": 1,
@@ -44,3 +45,4 @@ result = response.json() #=> {wait: 64}
 
 #print(result["kwh_prediction"])
 print(result)
+

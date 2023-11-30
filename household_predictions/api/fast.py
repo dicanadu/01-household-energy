@@ -19,23 +19,13 @@ app.add_middleware(
 )
 
 
-    ##### Create new dataframe from user inputs ######
-async def make_X_new(**user_input): #, column_order = None
-    """
-    This functions takes a dictionary coming from user inputs
-    and makes a one row of X for model prediciton.
-    Optionally re-ordering the columns.
-    """
-    user_input=locals().copy()
-    X_new = pd.DataFrame({k:[v] for k,v in user_input.items()})
-    #if column_order is not None:
-    #    X_new.reindex(columns=column_order)
-    return X_new
+
+
 
 
 # http://127.0.0.1:8000/predict?pickup_datetime=2012-10-06 12:10:20&pickup_longitude=40.7614327&pickup_latitude=-73.9798156&dropoff_longitude=40.6513111&dropoff_latitude=-73.8803331&passenger_count=2
 @app.get("/predict")
-def predict(request: Request#**params
+async def predict(request: Request
     #TYPEHUQ: int,
     #STORIES: int,
     #YEARMADERANGE: int,
@@ -74,17 +64,26 @@ def predict(request: Request#**params
      Baseline model is the default and is pulled from the cloud.
      """
 
-    query_params = dict(request.query_params)
+    ### get params
 
-    X_new = make_X_new(**query_params)
+    params = dict(request.query_params)
+
+    ##### Create new dataframe from user inputs ######
+    X_new = pd.DataFrame({k:[v] for k,v in params.items()})
 
     ## clean the dataframe
     X_new_clean = clean_data(X_new)
 
     y_pred = app.state.model.predict(X_new_clean)
 
-    return {'params':query_params}
-    #return {'kwh_prediction': int(y_pred)}
+    return {'kwh_prediction': int(y_pred)}
+
+
+@app.get("/getUserInfo")
+def getUserInfo(request:Request):
+    params = dict(request.query_params)
+    #params = locals().copy() #**params
+    return params
 
 
 @app.get("/")
