@@ -12,6 +12,8 @@ def call_data_url():
 
     df = pd.read_csv("https://www.eia.gov/consumption/residential/data/2020/csv/recs2020_public_v6.csv",
                      usecols=columns)
+
+
     return df
 
 

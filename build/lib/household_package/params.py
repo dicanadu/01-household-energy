@@ -21,8 +21,8 @@ INSTANCE = os.environ.get("INSTANCE")
 # GAR_MEMORY = os.environ.get("GAR_MEMORY")
 
 ##################  CONSTANTS  #####################
-# LOCAL_DATA_PATH = os.path.join(os.path.expanduser('~'), ".lewagon", "mlops", "data")
-# LOCAL_REGISTRY_PATH =  os.path.join(os.path.expanduser('~'), ".lewagon", "mlops", "training_outputs")
+#LOCAL_DATA_PATH = os.path.join(os.path.expanduser('~'), ".lewagon", "mlops", "data")
+LOCAL_REGISTRY_PATH =  os.environ.get("LOCAL_REGISTRY_PATH")
 
 
 DTYPES_PROCESSED = np.float32

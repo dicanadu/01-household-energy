@@ -39,6 +39,16 @@ def call_data_cloud():
 
     return df[columns]
 
+def make_X_new(user_input):
+    """
+    This functions takes a dictionary coming from user inputs
+    and makes a one row of X for model prediciton.
+    """
+    ## get all the passed arguments
+    #user_inputs = locals().copy()
+    X_new = pd.DataFrame({k:[v] for k,v in user_input.items()})
+    return X_new
+
 if __name__ == '__main__':
     df = call_data_url()
     print(df.head())

@@ -7,19 +7,66 @@ from sklearn.model_selection import train_test_split
 from household_package.registry import save_model
 from household_package.preprocessor import preprocessing
 from household_package.registry import load_model
+from household_package.clean import filter_data
+from household_package.data import make_X_new
 import pickle
+import pandas as pd
 
+user_input = {
+  "TYPEHUQ": 1,
+  "NHSLDMEM": 1,
+  "state_name": "Alabama",
+  "REGIONC": "SOUTH",
+  "BA_climate": "Hot-Humid",
+  "SQFTEST": 240,
+  "STORIES": 1,
+  "YEARMADERANGE": 1,
+  "NCOMBATH": 0,
+  "NHAFBATH": 0,
+  "TOTROOMS": 1,
+  "WALLTYPE": 1,
+  "ROOFTYPE": 1,
+  "WINDOWS": 1,
+  "SWIMPOOL": 1,
+  "SOLAR": 1,
+  "SMARTMETER": 1,
+  "TELLWORK": 1,
+  "DESKTOP": 0,
+  "NUMLAPTOP": 0,
+  "TVCOLOR": 0,
+  "DISHWASH": 1,
+  "MICRO": 0,
+  "NUMFRIG": 0,
+  "CWASHER": 1,
+  "DRYER": 1,
+  "LGTIN1TO4": 0,
+  "LGTIN4TO8": 0,
+  "LGTINMORE8": 0,
+  "AIRCOND": 1,
+  "EQUIPM": 3,
+  "HEATHOME": 1,
+  "NUMPORTEL": 0
+}
 
-
+X_new = clean_data(make_X_new(user_input))
+print(X_new)
 #df = call_data_url()
-df = call_data_url()
+#df = call_data_url()
 #print(df.head())
-df2 = clean_data(df)
+#df = filter_data(df)
 # print(df2.shape)
 # #print(df2.head())
-X , y = get_xy(df2)
+#X , y = get_xy(df)
+#df = clean_data(X)
+#print(X.loc[0,:])
 
-X_train, X_test, y_train, y_test =  train_test_split(X,y, test_size=0.3)
+#print(X.shape)
+
+#X_train, X_test, y_train, y_test =  train_test_split(X,y, test_size=0.3)
+#X_row = pd.DataFrame(X_train.loc[0,:]).T
+#print(X_row.columns)
+#print(X_train)
+
 
 # preprocesor = preprocessing(X_train)
 # X_train_prep = preprocesor.transform(X_train)
@@ -29,6 +76,8 @@ X_train, X_test, y_train, y_test =  train_test_split(X,y, test_size=0.3)
 #model = baseline_model(X_train, y_train)
 #print(model.score(X_test, y_test))
 model_cloud = load_model()
+print(model_cloud.predict(X_new))
+#print(model_cloud.predict(X_row))
 #save_model(model)
 
 # file_path = "/home/dicanadu/code/dicanadu/01-household-energy/model_h5/baseline/baseline_20231129-113413.pkl"
