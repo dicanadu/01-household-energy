@@ -24,9 +24,9 @@ def clean_data(df,min_perc=0.005, max_perc=0.995):
     #Maping features
     TYPEHUQ_map = {1: "Mobile", 2: "Single_detached",3: "Single_attached",
                    4: "Appartment_small" ,5: "Appartment_big"}
-    YEARMADERANGE_map = {1: "Before_50", 2:"50-59", 3:"60-69",
-                         4: "70-79", 5: "80-89", 6:"90-99", 7:"00-09",
-                         8:"2010-15", 9:"2016-20" }
+    # YEARMADERANGE_map = {1: "Before_50", 2:"50-59", 3:"60-69",
+    #                      4: "70-79", 5: "80-89", 6:"90-99", 7:"00-09",
+    #                      8:"2010-15", 9:"2016-20" }
     WALLTYPE_map = {1:"Brick",2:"Wood",3:"Siding",4:"Stucco",5:"Shingle",
                     6:"Stone",7:"Concrete",99:"Other"}
     ROOFTYPE_map = {1 : "Ceramic", 2 : "Wood", 3 : "Metal", 4: "Slate",
@@ -35,8 +35,8 @@ def clean_data(df,min_perc=0.005, max_perc=0.995):
                 5: "Electric_units", 7: "Room_heater", 8 : "Wood",
                 10:"Electric_heater", 99:"Other", -2:"Other"}
 
-    dics_transform = [TYPEHUQ_map, YEARMADERANGE_map, WALLTYPE_map, ROOFTYPE_map, EQUIPM_map]
-    columns_to_transform = ["TYPEHUQ", "YEARMADERANGE", "WALLTYPE", "ROOFTYPE", "EQUIPM"]
+    dics_transform = [TYPEHUQ_map,  WALLTYPE_map, ROOFTYPE_map, EQUIPM_map]
+    columns_to_transform = ["TYPEHUQ",  "WALLTYPE", "ROOFTYPE", "EQUIPM"]
 
     for x , y in zip(dics_transform,columns_to_transform):
         df[y] = df[y].map(x)

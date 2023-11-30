@@ -9,8 +9,11 @@ from household_package.preprocessor import preprocessing
 from household_package.registry import load_model
 from household_package.clean import filter_data
 from household_package.data import make_X_new
+from sklearn.model_selection import cross_validate
+
 import pickle
 import pandas as pd
+import numpy as np
 
 user_input = {
   "TYPEHUQ": 1,
@@ -48,35 +51,43 @@ user_input = {
   "NUMPORTEL": 0
 }
 
-X_new = clean_data(make_X_new(user_input))
-print(X_new)
-#df = call_data_url()
+#X_new = clean_data(make_X_new(user_input))
+#print(X_new)
+df = call_data_url()
 #df = call_data_url()
 #print(df.head())
-#df = filter_data(df)
-# print(df2.shape)
+df = filter_data(df)
+print(df["YEARMADERANGE"].unique())
 # #print(df2.head())
-#X , y = get_xy(df)
-#df = clean_data(X)
+X , y = get_xy(df)
+df = clean_data(X)
 #print(X.loc[0,:])
 
 #print(X.shape)
 
-#X_train, X_test, y_train, y_test =  train_test_split(X,y, test_size=0.3)
+X_train, X_test, y_train, y_test =  train_test_split(X,y, test_size=0.3)
+y_train_prep = np.log(y_train)
+y_test_prep = np.log(y_test)
+
 #X_row = pd.DataFrame(X_train.loc[0,:]).T
 #print(X_row.columns)
 #print(X_train)
 
 
 # preprocesor = preprocessing(X_train)
-# X_train_prep = preprocesor.transform(X_train)
-# X_test_prep = preprocesor.transform(X_test)
-# #print(X_test_prep.shape)
+# # X_train_prep = preprocesor.transform(X_train)
+# # X_test_prep = preprocesor.transform(X_test)
 
-#model = baseline_model(X_train, y_train)
-#print(model.score(X_test, y_test))
-model_cloud = load_model()
-print(model_cloud.predict(X_new))
+model_1 = baseline_model(X_train, y_train)
+#print(model_1.score(X_test, y_test))
+scores = cross_validate(model_1, X_train, y_train, cv=5)
+print(scores["test_score"].mean())
+#model_cloud = load_model()
+model_2 = baseline_model(X_train, y_train_prep)
+scores = cross_validate(model_2, X_train, y_train_prep, cv=5)
+print(scores["test_score"].mean())
+#print(model_2.score(X_test, y_test_prep))
+#print(model_cloud.predict(X_new))
 #print(model_cloud.predict(X_row))
 #save_model(model)
 
