@@ -3,8 +3,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 # from taxifare.ml_logic.preprocessor import preprocess_features
 from household_package.registry import load_model
-from household_package.data import clean_data, preprocessing, call_data_url
-import random
+from household_package.clean import clean_data
+#import random
 
 app = FastAPI()
 app.state.model = load_model()
@@ -71,10 +71,10 @@ def predict(
 
     ## preprocessing - but we nee dX_train to fit it!
     ## otherwise it should be part of the pipeline stored in the cloud!
-    X_train = clean_data(call_data_url()).drop(columns = 'KWH')
-    preprocessor = preprocessing(X_train)
-    X_new_processed = preprocessor.transform(X_new_clean)
-    y_pred = app.state.model.predict(X_new_processed)
+    #X_train = clean_data(call_data_url()).drop(columns = 'KWH')
+    #preprocessor = preprocessing(X_train)
+    #X_new_processed = preprocessor.transform(X_new_clean)
+    y_pred = app.state.model.predict(X_new_clean)
 
     return {'kwh_prediction': int(y_pred)}
 
