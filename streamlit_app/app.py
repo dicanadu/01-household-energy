@@ -1262,7 +1262,7 @@ with tab_appliances:
 
     with col5:
         st.subheader('Heating and cooling')
-        for feature in ['AIRCOND','EQUIPM','HEATHOME']: # , 'NUMPORTEL'
+        for feature in ['AIRCOND','EQUIPM','HEATHOME' , 'NUMPORTEL']:
             #st.write(feature)
             record_user_input(feature)
             #pass
