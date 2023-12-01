@@ -31,6 +31,10 @@ params={}
 
 url='https://ushouseholdenergy-jaiabuy6eq-ew.a.run.app/predict'
 
+## for testing ##
+test_url = 'https://ushouseholdenergy-jaiabuy6eq-ew.a.run.app/hello'
+test_params = {'name':'sveti'}
+
 #@st.cache_data(ttl=3600) # cache data for 1 hour
 def api_call(url, params):
     response=requests.get(url,params).json()
@@ -1279,9 +1283,18 @@ with tab_admin:
 
 st.divider()
 
+if st.button('Test me'):
+    resp = api_call(test_url, test_params)
+    st.write(f'{resp.get("hello")} do you want to predict your electricity consumption?')
+
 if st.button('Estimate my consumption'):
-    pred_kwh = api_call(url, params=params) #test_params
+    diego_url='https://household-predictions-api-jaiabuy6eq-ew.a.run.app/predict'
+    #pred_kwh = api_call(url, params=params) #test_params
+    pred_kwh = api_call(url=diego_url, params=params)
     st.write(pred_kwh #f'''
              #Your estimated consumption:\n
              #{pred_kwh} kWh'''
              )
+
+if st.button('Check what is broken'):
+    st.write(api_call(url=url, params=params))
