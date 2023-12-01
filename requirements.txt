@@ -19,6 +19,8 @@ pytest
 yapf
 
 # API
+uvicorn
+fastapi
 gcsfs
 google-cloud-storage
 mlflow
