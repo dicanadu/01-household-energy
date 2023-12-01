@@ -1211,7 +1211,7 @@ tab_main, tab_household, tab_appliances, tab_admin = st.tabs(['About your home',
 with tab_main:
     st.subheader('About your home')
 
-    main_features = ['TYPEHUQ','NHSLDMEM', 'state_name', 'SQFTEST']
+    main_features = ['TYPEHUQ','NHSLDMEM', 'TELLWORK', 'state_name', 'SQFTEST']
     for feature in main_features:
         record_user_input(feature)
 
@@ -1232,33 +1232,20 @@ with tab_appliances:
     st.subheader('Applicances')
 
     #appliance_features = list(set(all_features).difference(set(main_features+household_features)))
-    #st.write([f'{k}:{label_dict[k]}' for k in appliance_features])
 
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        st.subheader('Teleworking :computer:')
-        for feature in ['TELLWORK', 'DESKTOP','NUMLAPTOP']:
+        st.subheader('Living room :tv: :bulb: :computer:')
+        for feature in ['DESKTOP','NUMLAPTOP','TVCOLOR','LGTIN1TO4','LGTIN4TO8','LGTINMORE8']:
             record_user_input(feature)
 
     with col2:
-        st.subheader('Living room :tv:')
-        for feature in ['TVCOLOR']:
-            record_user_input(feature)
-
-    with col3:
         st.subheader('Chores :knife_fork_plate:')
         for feature in ['DISHWASH','MICRO','NUMFRIG', 'CWASHER','DRYER']:
             record_user_input(feature)
 
-    col4, col5, col6 = st.columns(3)
-
-    with col4:
-        st.subheader('Light bulbs :bulb:')
-        for feature in ['LGTIN1TO4','LGTIN4TO8','LGTINMORE8']:
-            record_user_input(feature)
-
-    with col5:
+    with col3:
         st.subheader('Heating and cooling')
         for feature in ['AIRCOND','EQUIPM','HEATHOME' , 'NUMPORTEL']:
             record_user_input(feature)
