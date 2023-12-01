@@ -29,17 +29,13 @@ params={}
 #test_params = {'state_name': 'TX'}
 #url='https://householdpredictions-jaiabuy6eq-ew.a.run.app/predict'
 
-url='https://ushouseholdenergy-jaiabuy6eq-ew.a.run.app/predict'
-
-## for testing ##
-test_url = 'https://ushouseholdenergy-jaiabuy6eq-ew.a.run.app/hello'
-test_params = {'name':'sveti'}
+url='https://household-predictions-api-jaiabuy6eq-ew.a.run.app/predict'
 
 #@st.cache_data(ttl=3600) # cache data for 1 hour
 def api_call(url, params):
     response=requests.get(url,params).json()
     #output prediction:
-    return response#.get("kwh_prediction")
+    return response.get("KWH")
 
 
 ########### hard-coded constants ###############
@@ -1172,25 +1168,30 @@ def record_user_input(feature):
         params['REGIONC'] = state_to_region.get(params['state_name'])
         params['BA_climate'] = climate_dict.get(params['state_name'])
 
+    ##### hard-coded features #####
+    elif feature in ['NHAFBATH','NUMLAPTOP','LGTIN4TO8','LGTINMORE8']:
+        params[feature]=0
+
     ##### features that need a dropdown text #####
-    if feature in selectbox_features:
+    elif feature in selectbox_features:
         params[feature] = st.selectbox(label = label_dict.get(feature),
                                     options= values_dict.get(feature).split('\n'))
     ##### features with purely numeric input #####
-    if feature in numeric_features:
+    elif feature in numeric_features:
         params[feature] = int(st.number_input(*make_numeric_input(feature)))
 
     ##### features where dropdown input is transferred to numeric #####
-    if feature in num_checkbox_features:
+    elif feature in num_checkbox_features:
         user_value = st.selectbox(label=label_dict.get(feature),
                                   options=mapped_features.get(feature).keys())
         params[feature] = int(mapped_features.get(feature).get(user_value))
 
     ##### features which have both numeric range and text #####
-    if feature in numeric_features_dropdown:
+    elif feature in numeric_features_dropdown:
         user_value = st.selectbox(label=label_dict.get(feature),
                                   options=mapped_features.get(feature).keys())
         params[feature] = int(mapped_features.get(feature).get(user_value))
+
 
 
 
@@ -1210,13 +1211,9 @@ tab_main, tab_household, tab_appliances, tab_admin = st.tabs(['About your home',
 with tab_main:
     st.subheader('About your home')
 
-    main_features = ['TYPEHUQ','NHSLDMEM', 'state_name']
+    main_features = ['TYPEHUQ','NHSLDMEM', 'state_name', 'SQFTEST']
     for feature in main_features:
         record_user_input(feature)
-        #pass
-
-    ###### section ADMIN ######
-    # right now don't know how to input climate or climate code as a user
 
 
 with tab_household:
@@ -1224,12 +1221,11 @@ with tab_household:
 
     ###### section HOUSEHOLD CHARACTERISTICS ######
 
-    household_features = ['SQFTEST', 'STORIES','YEARMADERANGE','NCOMBATH',
+    household_features = ['STORIES','YEARMADERANGE','NCOMBATH',
                             'NHAFBATH','TOTROOMS', 'WALLTYPE','ROOFTYPE','WINDOWS', 'SWIMPOOL', 'SOLAR',
                             'SMARTMETER']
     for feature in household_features:
         record_user_input(feature)
-        #pass
 
 
 with tab_appliances:
@@ -1244,19 +1240,16 @@ with tab_appliances:
         st.subheader('Teleworking :computer:')
         for feature in ['TELLWORK', 'DESKTOP','NUMLAPTOP']:
             record_user_input(feature)
-            #pass
 
     with col2:
         st.subheader('Living room :tv:')
         for feature in ['TVCOLOR']:
             record_user_input(feature)
-            #pass
 
     with col3:
         st.subheader('Chores :knife_fork_plate:')
         for feature in ['DISHWASH','MICRO','NUMFRIG', 'CWASHER','DRYER']:
             record_user_input(feature)
-            #pass
 
     col4, col5, col6 = st.columns(3)
 
@@ -1264,14 +1257,11 @@ with tab_appliances:
         st.subheader('Light bulbs :bulb:')
         for feature in ['LGTIN1TO4','LGTIN4TO8','LGTINMORE8']:
             record_user_input(feature)
-            #pass
 
     with col5:
         st.subheader('Heating and cooling')
         for feature in ['AIRCOND','EQUIPM','HEATHOME' , 'NUMPORTEL']:
-            #st.write(feature)
             record_user_input(feature)
-            #pass
 
 with tab_admin:
     st.subheader('Parameters sent to the API:')
@@ -1283,18 +1273,9 @@ with tab_admin:
 
 st.divider()
 
-if st.button('Test me'):
-    resp = api_call(test_url, test_params)
-    st.write(f'{resp.get("hello")} do you want to predict your electricity consumption?')
-
 if st.button('Estimate my consumption'):
-    diego_url='https://household-predictions-api-jaiabuy6eq-ew.a.run.app/predict'
-    #pred_kwh = api_call(url, params=params) #test_params
-    pred_kwh = api_call(url=diego_url, params=params)
-    st.write(pred_kwh #f'''
-             #Your estimated consumption:\n
-             #{pred_kwh} kWh'''
+    pred_kwh = api_call(url=url, params=params)
+    st.write(f'''
+             Your estimated consumption:\n
+             {int(pred_kwh)} kWh'''
              )
-
-if st.button('Check what is broken'):
-    st.write(api_call(url=url, params=params))
