@@ -129,10 +129,11 @@ def record_user_input(feature):
 
 ############## tabs - organize features by sections ###############
 
-tab_main, tab_household, tab_appliances, tab_admin = st.tabs(['About your home',
-                                                   'Household characteristics',
-                                                    'Appliances',
-                                                    'Admin'])
+tab_main, tab_household, tab_appliances = st.tabs(['About your home'
+                                                   ,'Household characteristics'
+                                                    ,'Appliances'
+                                                    #,'Admin'
+                                                    ]) #, tab_admin
 
 #############################################
 ############### user input ##################
@@ -213,4 +214,10 @@ if st.button('Estimate my consumption'):
               value = f'{int(pred_kwh)} kWh', #
              delta = None)
     st.markdown(f'*Estimation can vary in the range {round(int(pred_kwh*0.85),-2)} - {round(int(pred_kwh*1.15), -2)} kWh.')
-    #st.snow()
+    st.snow()
+    if pred_kwh < 5921:
+        st.markdown('Your consumption is below 25% of all U.S. households.')
+    elif pred_kwh > 14155:
+        st.markdown('Your consumption is above 75% of all U.S. households.')
+    else:
+        st.markdown('Your consumption is around average of all U.S. households.')
