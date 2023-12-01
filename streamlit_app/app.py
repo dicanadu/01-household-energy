@@ -10,14 +10,18 @@ st.set_page_config(page_title='U.S. household electricity consumption'
 
 
 
-'''
-# U.S. Household Energy Consumption
-# 🇺🇸🏠
+# nicer header with html:
+st.markdown("<h2 style='text-align: center; color: #CF5050;'>🇺🇸 U.S. household electricity consumption 🏠</h2>", unsafe_allow_html=True)
 
+st.divider()
 
-This application will estimate your yearly energy consumption (in kWh).
+st.markdown('''
 
-'''
+:rainbow[Welcome!]
+
+This application will estimate your yearly electrical energy consumption (in kWh).
+
+''')
 
 
 ############ initiate parameters for API request ############
@@ -31,7 +35,7 @@ params={}
 
 url='https://household-predictions-api-jaiabuy6eq-ew.a.run.app/predict'
 
-#@st.cache_data(ttl=3600) # cache data for 1 hour
+@st.cache_data(ttl=3600) # cache data for 1 hour
 def api_call(url, params):
     response=requests.get(url,params).json()
     #output prediction:
@@ -61,8 +65,8 @@ numeric_features=['NCOMBATH', 'NHAFBATH', 'TOTROOMS', 'NUMFRIG', 'MICRO', 'TVCOL
 numeric_features_dropdown = ['NUMPORTEL']
 num_checkbox_features = ['TYPEHUQ', 'STORIES', 'YEARMADERANGE', 'WALLTYPE', 'ROOFTYPE', 'WINDOWS', 'SWIMPOOL', 'DISHWASH', 'CWASHER', 'DRYER', 'TELLWORK', 'HEATHOME', 'EQUIPM', 'AIRCOND', 'SMARTMETER', 'SOLAR']
 
-all_features = geo_features+numeric_features+num_checkbox_features+numeric_features_dropdown#+selectbox_features
-
+# features with yes or no get a toggle
+yes_no_features = ['SWIMPOOL', 'DISHWASH', 'CWASHER', 'DRYER', 'TELLWORK', 'HEATHOME', 'AIRCOND', 'SMARTMETER', 'SOLAR']
 
 ########### dictionary of mappings ################
 
@@ -85,7 +89,7 @@ def record_user_input(feature):
     """
     ##### geography features ######
     if feature=='state_name':
-        state_postal = st.selectbox('Select your state:', states.keys())
+        state_postal = st.selectbox('Select your state:', states.keys(), 4)
         params['state_name'] = states.get(state_postal)
         params['REGIONC'] = state_to_region.get(params['state_name'])
         params['BA_climate'] = climate_dict.get(params['state_name'])
@@ -93,6 +97,10 @@ def record_user_input(feature):
     ##### hard-coded features #####
     elif feature in ['NHAFBATH','NUMLAPTOP','LGTIN4TO8','LGTINMORE8']:
         params[feature]=0
+
+    ##### yes - no features #####
+    elif feature in yes_no_features:
+        params[feature] = int(st.toggle(label_dict.get(feature), value=True))
 
     ##### features that need a dropdown text #####
     elif feature in selectbox_features:
@@ -104,11 +112,13 @@ def record_user_input(feature):
 
     ##### features where dropdown input is transferred to numeric #####
     elif feature in num_checkbox_features:
-        user_value = st.selectbox(label=label_dict.get(feature),
+        #user_value = st.selectbox(label=label_dict.get(feature),
+        user_value = st.radio(label=label_dict.get(feature),
                                   options=mapped_features.get(feature).keys())
         params[feature] = int(mapped_features.get(feature).get(user_value))
 
     ##### features which have both numeric range and text #####
+    # TODO get rid of them, we impute the text values anyway
     elif feature in numeric_features_dropdown:
         user_value = st.selectbox(label=label_dict.get(feature),
                                   options=mapped_features.get(feature).keys())
@@ -131,12 +141,26 @@ tab_main, tab_household, tab_appliances, tab_admin = st.tabs(['About your home',
 ###### section Main: GEOGRAPHY, ADMIN, basic household (type, no. of persons) ##########
 
 with tab_main:
+
     st.subheader('About your home')
 
-    main_features = ['TYPEHUQ','NHSLDMEM', 'TELLWORK', 'state_name', 'SQFTEST']
-    for feature in main_features:
-        record_user_input(feature)
+    c1, c2 = st.columns(2)
 
+    with c1:
+        st.markdown(':red[Your house] :house_buildings:')
+        for feature in ['TYPEHUQ', 'SQFTEST']:
+            record_user_input(feature)
+            #st.radio(label=label_dict.get(feature),
+            #         options=['yes','no'])
+            #st.toggle(label=label_dict.get(feature))
+
+    with c2:
+        st.markdown(':red[Your people] 👨‍👩‍👧‍👧')
+        for feature in ['NHSLDMEM', 'TELLWORK']:
+            record_user_input(feature)
+
+    st.markdown(':red[Your location] :world_map:')
+    record_user_input('state_name')
 
 with tab_household:
     st.subheader('Your household')
