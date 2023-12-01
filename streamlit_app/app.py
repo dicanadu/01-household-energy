@@ -31,9 +31,9 @@ params={}
 
 ## test of the API to docker container on the cloud
 #test_params = {'state_name': 'TX'}
-#url='https://householdpredictions-jaiabuy6eq-ew.a.run.app/predict'
+#url='https://household-predictions-api-jaiabuy6eq-ew.a.run.app/predict'
 
-url='https://household-predictions-api-jaiabuy6eq-ew.a.run.app/predict'
+url='https://household-predictions-apilog-jaiabuy6eq-ew.a.run.app/predict'
 
 @st.cache_data(ttl=3600) # cache data for 1 hour
 def api_call(url, params):
@@ -159,16 +159,17 @@ with tab_main:
         for feature in ['NHSLDMEM', 'TELLWORK']:
             record_user_input(feature)
 
-    st.markdown(':red[Your location] :world_map:')
-    record_user_input('state_name')
+        st.markdown(':red[Your location] :world_map:')
+        record_user_input('state_name')
 
 with tab_household:
     st.subheader('Your household')
 
     ###### section HOUSEHOLD CHARACTERISTICS ######
 
+    #,'ROOFTYPE',  'WALLTYPE',
     household_features = ['STORIES','YEARMADERANGE','NCOMBATH',
-                            'NHAFBATH','TOTROOMS', 'WALLTYPE','ROOFTYPE','WINDOWS', 'SWIMPOOL', 'SOLAR',
+                            'NHAFBATH','TOTROOMS','WINDOWS', 'SWIMPOOL', 'SOLAR',
                             'SMARTMETER']
     for feature in household_features:
         record_user_input(feature)
@@ -196,9 +197,9 @@ with tab_appliances:
         for feature in ['AIRCOND','EQUIPM','HEATHOME' , 'NUMPORTEL']:
             record_user_input(feature)
 
-with tab_admin:
-    st.subheader('Parameters sent to the API:')
-    st.write(params)
+#with tab_admin:
+#    st.subheader('Parameters sent to the API:')
+#    st.write(params)
 
 
 
@@ -208,7 +209,8 @@ st.divider()
 
 if st.button('Estimate my consumption'):
     pred_kwh = api_call(url=url, params=params)
-    st.write(f'''
-             Your estimated consumption:\n
-             {int(pred_kwh)} kWh'''
-             )
+    st.metric(label='Your estimated consumption:*', #\n
+              value = f'{int(pred_kwh)} kWh', #
+             delta = None)
+    st.markdown(f'*Estimation can vary in the range {round(int(pred_kwh*0.85),-2)} - {round(int(pred_kwh*1.15), -2)} kWh.')
+    #st.snow()
