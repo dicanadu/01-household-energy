@@ -340,27 +340,27 @@ with st.sidebar:
                 else:
                     st.markdown('Your consumption is around average of all U.S. households.')
 
-                plot_lower = 1186
-                plot_upper = 38007
-                plot_categories = ['Your Estimate']
-                plot_data = np.array([plot_lower, kwh_plot, plot_upper])
+                # plot_lower = 1186
+                # plot_upper = 38007
+                # plot_categories = ['Your Estimate']
+                # plot_data = np.array([plot_lower, kwh_plot, plot_upper])
 
-                # Plotting the horizontal stacked bar chart
-                fig, ax = plt.subplots()
+                # # Plotting the horizontal stacked bar chart
+                # fig, ax = plt.subplots()
 
-                ax.barh(plot_categories, plot_data[2], color='lightcoral', label='Upper Bound')
-                ax.barh(plot_categories, plot_data[1] - plot_data[0], left=plot_data[0], color='lightblue', label='Your Estimate')
-                ax.barh(plot_categories, plot_data[0], color='lightgreen', label='Lower Bound')
+                # ax.barh(plot_categories, plot_data[2], color='lightcoral', label='Upper Bound')
+                # ax.barh(plot_categories, plot_data[1] - plot_data[0], left=plot_data[0], color='lightblue', label='Your Estimate')
+                # ax.barh(plot_categories, plot_data[0], color='lightgreen', label='Lower Bound')
 
-                # Adding labels and legend
-                ax.set_xlabel('Range')
-                # ax.set_ylabel('Categories')
-                # ax.set_xlim([upper_bound-lower_bound, upper_bound])
-                ax.set_title('Horizontal Stacked Bar Chart with Bounds')
-                ax.legend()
+                # # Adding labels and legend
+                # ax.set_xlabel('Range')
+                # # ax.set_ylabel('Categories')
+                # # ax.set_xlim([upper_bound-lower_bound, upper_bound])
+                # ax.set_title('Horizontal Stacked Bar Chart with Bounds')
+                # ax.legend()
 
-                # Show the plot
-                st.pyplot(fig)
+                # # Show the plot
+                # st.pyplot(fig)
 
                 st.markdown(f"")
                 st.markdown(f"")
