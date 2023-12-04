@@ -32,8 +32,8 @@ params={}
 ## test of the API to docker container on the cloud
 #test_params = {'state_name': 'TX'}
 #url='https://household-predictions-api-jaiabuy6eq-ew.a.run.app/predict'
-
-url='https://household-predictions-apilog-jaiabuy6eq-ew.a.run.app/predict'
+#url='https://household-predictions-apilog-jaiabuy6eq-ew.a.run.app/predict'
+url='https://household-predictions-apilog-improved-jaiabuy6eq-ew.a.run.app/predict'
 
 @st.cache_data(ttl=3600) # cache data for 1 hour
 def api_call(url, params):
@@ -96,7 +96,7 @@ def record_user_input(feature):
     if feature=='state_name':
         state_postal = st.selectbox('Select your state:', states.keys(), 4)
         params['state_name'] = states.get(state_postal)
-        params['REGIONC'] = state_to_region.get(params['state_name'])
+        #params['REGIONC'] = state_to_region.get(params['state_name'])
         params['BA_climate'] = climate_dict.get(params['state_name'])
 
     ##### hard-coded features #####
@@ -163,7 +163,7 @@ with tab_main:
 
     with c2:
         st.markdown(':red[Your people] 👨‍👩‍👧‍👧')
-        for feature in ['NHSLDMEM', 'TELLWORK']:
+        for feature in ['NHSLDMEM']: #, 'TELLWORK'
             record_user_input(feature)
 
         st.markdown(':red[Your location] :world_map:')
@@ -176,7 +176,7 @@ with tab_household:
 
     #,'ROOFTYPE',  'WALLTYPE',
     household_features = ['STORIES','YEARMADERANGE','NCOMBATH',
-                            'NHAFBATH','TOTROOMS','WINDOWS', 'SWIMPOOL', 'SOLAR',
+                            'NHAFBATH','TOTROOMS','WINDOWS', 'SWIMPOOL',# 'SOLAR',
                             'SMARTMETER']
     for feature in household_features:
         record_user_input(feature)
@@ -230,11 +230,9 @@ with st.sidebar:
                 st.markdown(f'*Estimation can vary in the range {lower_bound} - {upper_bound} kWh.')
 
                 ## price ##
-                user_price = price_per_state.get(params['state_name'], 0)
-                st.markdown(f'Your estimated yearly bill is between \${round(lower_bound*user_price)}.00 and \${round(upper_bound*user_price)}.00*')
+                user_price = price_per_state.get(params['state_name'], 0) # monthly
+                st.markdown(f'Your estimated monthly bill is between \${round(lower_bound*user_price)}.00 and \${round(upper_bound*user_price)}.00*')
                 st.markdown(f'*based on average values for your state in December 2023. [Source](https://www.energybot.com/electricity-rates-by-state.html#:~:text=The%20Average%20Electricity%20Rate%20in,11.38%20cents%20per%20kilowatt%2Dhour)')
-
-
 
                 ## how do you compare to other households? ##
                 if pred_kwh < 5921:
