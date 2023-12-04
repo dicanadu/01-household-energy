@@ -3,5 +3,4 @@
 # ----------------------------------
 
 streamlit:
-	-@streamlit run app.py
-
+	-@streamlit run Home.py
