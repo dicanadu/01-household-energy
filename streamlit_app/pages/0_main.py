@@ -1,6 +1,9 @@
 import requests
 import streamlit as st
 import pandas as pd
+import numpy as np
+import time
+import matplotlib.pyplot as plt
 
 ########## page info ############
 
@@ -36,10 +39,30 @@ params={}
 url='https://household-predictions-apilog-jaiabuy6eq-ew.a.run.app/predict'
 
 @st.cache_data(ttl=3600) # cache data for 1 hour
-def api_call(url, params):
-    response=requests.get(url,params).json()
-    #output prediction:
-    return response.get("KWH")
+# def api_call(url, params):
+#     response=requests.get(url,params).json()
+#     #output prediction:
+#     return response.get("KWH")
+def api_call(url, params, toggle_state):
+    # Modify the params based on the toggle_state if needed
+    if toggle_state:
+        params['toggle_state'] = toggle_state
+        response = requests.get(url, params).json()
+        result = response.get("KWH")/12
+        pred_kwh_filter = "monthly"
+    else:
+        response = requests.get(url, params).json()
+        result = response.get("KWH")
+        pred_kwh_filter = "annual"
+    # output prediction:
+    return result, pred_kwh_filter
+
+# Get the toggle state
+# toggle_state = st.checkbox("Toggle State")
+
+# Call the API with the updated function
+# prediction = api_call(url, params, toggle_state)
+
 
 
 ########### hard-coded constants ###############
@@ -203,25 +226,97 @@ with tab_appliances:
             record_user_input(feature)
 
 with st.sidebar:
+        toggle_state = st.toggle('Monthly')
+        user_price = price_per_state.get(params['state_name'], 0)
         if st.button('Estimate my consumption'
                      , help = '''Estimate my consumption'''
                      , type = 'primary'):
+            progress_text = "Operation in progress. Please wait."
+            my_bar = st.progress(0, text=progress_text)
 
-            pred_kwh = api_call(url=url, params=params)
+            for percent_complete in range(100):
+                time.sleep(0.01)
+                my_bar.progress(percent_complete + 1, text=progress_text)
+            time.sleep(1)
 
-            st.metric(label='Your estimated consumption:*', #\n
+            completed_text = "Operation completed!"
+            my_bar.empty()  # Clear the progress bar
+            # toggle_state = st.toggle('Monthly')
+            # st.text(completed_text)
+            st.balloons()
+
+            pred_kwh, pred_kwh_filter = api_call(url=url, params=params, toggle_state=toggle_state)
+            formatted_number = "{:.2f}".format(int(pred_kwh)*user_price)
+
+            kwh_est = st.metric(label=f'Your estimated {pred_kwh_filter} consumption:', #\n
                           value = f'{int(pred_kwh)} kWh', #
                          delta = None)
+
+            cost_est = st.metric(label=f'Your estimated {pred_kwh_filter} cost:', #\n
+                value = f'${formatted_number}', #
+                delta = None)
+            # monthly_est = st.metric(label='Your estimated monthly consumption:*', #\n
+            #               value = f'{int(pred_kwh)/12} kWh', #
+            #              delta = None)
 
             ## celebratory snow ##
             #st.snow()
 
             with tab_results:
             ############# callback to calculate kWh ################
-            #st.divider()
-                st.metric(label='Your estimated consumption:*', #\n
-                          value = f'{int(pred_kwh)} kWh', #
-                         delta = None)
+
+                # Streamlit app
+                # st.title('Toggle Results: Monthly/Yearly')
+
+                # Sidebar with selection widget
+                # interval = st.sidebar.selectbox('Select Interval:', ['Monthly', 'Yearly'])
+
+                # on = st.toggle('Monthly')
+                kwh_plot = 0
+
+                if toggle_state:
+                    # pred_kwh = api_call(url=url, params=params, toggle_state=toggle_state)
+                    # pred_kwh
+                    # st.write('Monthly')
+                                    # Original
+                    kwh_plot += int(pred_kwh)
+                    col1, col2 = st.columns(2)
+
+                    with col1:
+
+                        st.metric(label=f'Your estimated {pred_kwh_filter} consumption:', #\n
+                                value = f'{int(pred_kwh)} kWh', #
+                                delta = None)
+
+                    with col2:
+                        formatted_number = "{:.2f}".format(int(pred_kwh)*user_price)
+                        st.metric(label=f'Your estimated {pred_kwh_filter} cost:', #\n
+                                value = f'${formatted_number}', #
+                                delta = None)
+
+
+                else:
+                    # pred_kwh = api_call(url=url, params=params, toggle_state=toggle_state)
+                    # pred_kwh
+                    kwh_plot += int(pred_kwh)
+                    col1, col2 = st.columns(2)
+
+                    with col1:
+                        st.metric(label=f'Your estimated {pred_kwh_filter} consumption:', #\n
+                                value = f'{int(pred_kwh)} kWh', #
+                                delta = None)
+
+                    with col2:
+                        formatted_number = "{:.2f}".format(int(pred_kwh)*user_price)
+                        st.metric(label=f'Your estimated {pred_kwh_filter} cost:', #\n
+                                value = f'${formatted_number}', #
+                                delta = None)
+
+
+                # # Original
+                # st.metric(label='Your estimated consumption:*', #\n
+                #           value = f'{int(pred_kwh)} kWh', #
+                #          delta = None)
 
                 ## hard coded confidence interval
                 ci = 0.15
@@ -231,8 +326,9 @@ with st.sidebar:
 
                 ## price ##
                 user_price = price_per_state.get(params['state_name'], 0)
+                # user_price
                 st.markdown(f'Your estimated yearly bill is between \${round(lower_bound*user_price)}.00 and \${round(upper_bound*user_price)}.00*')
-                st.markdown(f'*based on average values for your state in December 2023. [Source](https://www.energybot.com/electricity-rates-by-state.html#:~:text=The%20Average%20Electricity%20Rate%20in,11.38%20cents%20per%20kilowatt%2Dhour)')
+
 
 
 
@@ -244,7 +340,42 @@ with st.sidebar:
                 else:
                     st.markdown('Your consumption is around average of all U.S. households.')
 
+                plot_lower = 1186
+                plot_upper = 38007
+                plot_categories = ['Your Estimate']
+                plot_data = np.array([plot_lower, kwh_plot, plot_upper])
 
+                # Plotting the horizontal stacked bar chart
+                fig, ax = plt.subplots()
+
+                ax.barh(plot_categories, plot_data[2], color='lightcoral', label='Upper Bound')
+                ax.barh(plot_categories, plot_data[1] - plot_data[0], left=plot_data[0], color='lightblue', label='Your Estimate')
+                ax.barh(plot_categories, plot_data[0], color='lightgreen', label='Lower Bound')
+
+                # Adding labels and legend
+                ax.set_xlabel('Range')
+                # ax.set_ylabel('Categories')
+                # ax.set_xlim([upper_bound-lower_bound, upper_bound])
+                ax.set_title('Horizontal Stacked Bar Chart with Bounds')
+                ax.legend()
+
+                # Show the plot
+                st.pyplot(fig)
+
+                st.markdown(f"")
+                st.markdown(f"")
+                st.markdown(f"")
+                st.markdown(f"")
+                st.markdown(f"")
+                st.markdown(f"")
+                st.markdown(f"")
+                st.markdown(f"")
+                st.markdown(f"")
+                st.markdown(f"")
+                st.markdown(f"")
+                st.markdown(f"")
+                st.markdown(f"")
+                st.markdown(f"*based on average values for your state in December 2023. [Source](https://www.energybot.com/electricity-rates-by-state.html#:~:text=The%20Average%20Electricity%20Rate%20in,11.38%20cents%20per%20kilowatt%2Dhour)")
 #with tab_admin:
 #    st.subheader('Parameters sent to the API:')
 #    st.write(params)
