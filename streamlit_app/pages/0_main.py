@@ -35,8 +35,8 @@ params={}
 ## test of the API to docker container on the cloud
 #test_params = {'state_name': 'TX'}
 #url='https://household-predictions-api-jaiabuy6eq-ew.a.run.app/predict'
-
-url='https://household-predictions-apilog-jaiabuy6eq-ew.a.run.app/predict'
+#url='https://household-predictions-apilog-jaiabuy6eq-ew.a.run.app/predict'
+url='https://household-predictions-apilog-improved-jaiabuy6eq-ew.a.run.app/predict'
 
 @st.cache_data(ttl=3600) # cache data for 1 hour
 # def api_call(url, params):
@@ -102,6 +102,11 @@ mapped_features = {'TYPEHUQ': {'Mobile home': '1', 'Single-family house detached
 
 ## numeric features defaults
 defaults_numeric = {'NCOMBATH': 2, 'TOTROOMS': 6, 'NUMFRIG': 1, 'MICRO': 1, 'TVCOLOR': 2, 'DESKTOP': 0, 'LGTIN1TO4': 4, 'NHSLDMEM': 2, 'SQFTEST': 1530}
+# indices of most frequent categorical value
+categorical_defaults = {'NUMPORTEL': 0, 'TYPEHUQ': 1, 'STORIES': 0, 'YEARMADERANGE': 3, 'WINDOWS': 3, 'SWIMPOOL': 1, 'DISHWASH': 0, 'CWASHER': 0, 'DRYER': 0, 'TELLWORK': 1, 'HEATHOME': 0, 'EQUIPM': 0, 'AIRCOND': 0, 'SMARTMETER': 1, 'SOLAR': 1}
+# boolean defaults for toggle features
+binary_defaults={'SWIMPOOL': False, 'DISHWASH': True, 'CWASHER': True, 'DRYER': True, 'TELLWORK': False, 'HEATHOME': True, 'AIRCOND': True, 'SMARTMETER': False, 'SOLAR': False}
+
 
 @st.cache_data
 def make_numeric_input(feature):
@@ -119,7 +124,7 @@ def record_user_input(feature):
     if feature=='state_name':
         state_postal = st.selectbox('Select your state:', states.keys(), 4)
         params['state_name'] = states.get(state_postal)
-        params['REGIONC'] = state_to_region.get(params['state_name'])
+        #params['REGIONC'] = state_to_region.get(params['state_name'])
         params['BA_climate'] = climate_dict.get(params['state_name'])
 
     ##### hard-coded features #####
@@ -128,7 +133,8 @@ def record_user_input(feature):
 
     ##### yes - no features #####
     elif feature in yes_no_features:
-        params[feature] = int(st.toggle(label_dict.get(feature), value=True))
+        params[feature] = int(st.toggle(label=label_dict.get(feature)
+                                        , value=binary_defaults.get(feature)))
 
     ##### features that need a dropdown text #####
     elif feature in selectbox_features:
@@ -142,7 +148,8 @@ def record_user_input(feature):
     elif feature in num_checkbox_features:
         #user_value = st.selectbox(label=label_dict.get(feature),
         user_value = st.radio(label=label_dict.get(feature),
-                                  options=mapped_features.get(feature).keys())
+                                  options=mapped_features.get(feature).keys()
+                                  , index = categorical_defaults.get(feature))
         params[feature] = int(mapped_features.get(feature).get(user_value))
 
     ##### features which have both numeric range and text #####
@@ -186,7 +193,7 @@ with tab_main:
 
     with c2:
         st.markdown(':red[Your people] 👨‍👩‍👧‍👧')
-        for feature in ['NHSLDMEM', 'TELLWORK']:
+        for feature in ['NHSLDMEM']: #, 'TELLWORK'
             record_user_input(feature)
 
         st.markdown(':red[Your location] :world_map:')
@@ -199,7 +206,7 @@ with tab_household:
 
     #,'ROOFTYPE',  'WALLTYPE',
     household_features = ['STORIES','YEARMADERANGE','NCOMBATH',
-                            'NHAFBATH','TOTROOMS','WINDOWS', 'SWIMPOOL', 'SOLAR',
+                            'NHAFBATH','TOTROOMS','WINDOWS', 'SWIMPOOL',# 'SOLAR',
                             'SMARTMETER']
     for feature in household_features:
         record_user_input(feature)
