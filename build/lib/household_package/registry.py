@@ -49,23 +49,49 @@ def load_model(model_type='baseline'):
     blobs = list(client.get_bucket(BUCKET_NAME).list_blobs(prefix="model"))
     #print(blobs)
     try:
-        # latest_blob = max(blobs, key=lambda x: x.updated)
+        latest_blob = max(blobs, key=lambda x: x.updated)
         #print(latest_blob.name)
-        # latest_model_path_to_save = os.path.join(LOCAL_REGISTRY_PATH, latest_blob.name)
-        print(LOCAL_REGISTRY_PATH)
-        # latest_blob.download_to_filename(latest_model_path_to_save)
+        latest_model_path_to_save = os.path.join(LOCAL_REGISTRY_PATH, latest_blob.name)
+        latest_blob.download_to_filename(latest_model_path_to_save)
 
-        # # for sklearn (baseline)
-        # if model_type=='baseline':
-        #     with open(latest_model_path_to_save , 'rb') as f:
-        #         latest_model = pickle.load(f)
-        #else:
-            # for tf.keras models
-            #latest_model = keras.models.load_model(latest_model_path_to_save)
+        # for sklearn (baseline)
+        if model_type=='baseline':
+            with open(latest_model_path_to_save , 'rb') as f:
+                latest_model = pickle.load(f)
+        # else:
+        #     for tf.keras models
+        #     latest_model = keras.models.load_model(latest_model_path_to_save)
         print("✅ Latest model downloaded from cloud storage")
-        #return latest_model
-        return LOCAL_REGISTRY_PATH
+        return latest_model
 
     except:
         print(f"\n❌ No model found in GCS bucket {BUCKET_NAME}")
         return None
+
+def load_model_locally():
+    """
+    Return a saved model:
+    - locally (latest one in alphabetical order)
+    - or from GCS (most recent one) if MODEL_TARGET=='gcs'  --> for unit 02 only
+    Return None (but do not Raise) if no model is found
+    """
+    latest_model_path_to_save = "./model_h5/loaded/models/baseline_20231130-102940.pkl"
+    with open(latest_model_path_to_save , 'rb') as f:
+        latest_model = pickle.load(f)
+
+    print("✅ Latest model downloaded from cloud storage")
+    return latest_model
+
+def load_model_locally_log():
+    """
+    Return a saved model:
+    - locally (latest one in alphabetical order)
+    - or from GCS (most recent one) if MODEL_TARGET=='gcs'  --> for unit 02 only
+    Return None (but do not Raise) if no model is found
+    """
+    latest_model_path_to_save = "./model_h5/loaded/models/baseline_20231201-151102.pkl"
+    with open(latest_model_path_to_save , 'rb') as f:
+        latest_model = pickle.load(f)
+
+    print("✅ Latest model downloaded from cloud storage")
+    return latest_model

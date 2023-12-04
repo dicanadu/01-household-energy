@@ -11,9 +11,7 @@ user_input = {
   "YEARMADERANGE": 1,
   "NCOMBATH": 0,
   "NHAFBATH": 0,
-  "TOTROOMS": 1,
-  "WALLTYPE": 1,
-  "ROOFTYPE": 1,
+  "TOTROOMS": 5,
   "WINDOWS": 1,
   "SWIMPOOL": 1,
   "SOLAR": 1,
@@ -36,7 +34,8 @@ user_input = {
   "NUMPORTEL": 0
 }
 
-url = "http://localhost:8000/predict"
+url = "https://household-predictions-apilog-jaiabuy6eq-ew.a.run.app/predict"
 
 response = requests.get(url, user_input)
+print(response)
 print(response.json())

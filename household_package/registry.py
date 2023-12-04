@@ -75,7 +75,21 @@ def load_model_locally():
     - or from GCS (most recent one) if MODEL_TARGET=='gcs'  --> for unit 02 only
     Return None (but do not Raise) if no model is found
     """
-    latest_model_path_to_save = "../model_h5/loaded/models/baseline_20231130-102940.pkl"
+    latest_model_path_to_save = "./model_h5/loaded/models/baseline_20231130-102940.pkl"
+    with open(latest_model_path_to_save , 'rb') as f:
+        latest_model = pickle.load(f)
+
+    print("✅ Latest model downloaded from cloud storage")
+    return latest_model
+
+def load_model_locally_log():
+    """
+    Return a saved model:
+    - locally (latest one in alphabetical order)
+    - or from GCS (most recent one) if MODEL_TARGET=='gcs'  --> for unit 02 only
+    Return None (but do not Raise) if no model is found
+    """
+    latest_model_path_to_save = "./model_h5/loaded/models/baseline_20231201-151102.pkl"
     with open(latest_model_path_to_save , 'rb') as f:
         latest_model = pickle.load(f)
 
