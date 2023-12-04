@@ -12,3 +12,4 @@ requirements_prod.txt
 .env.yaml
 tests/
 docker_build.txt
+notebook/
