@@ -77,11 +77,14 @@ mapped_features = {'TYPEHUQ': {'Mobile home': '1', 'Single-family house detached
 
 ############# functions ############
 
+## numeric features defaults
+defaults_numeric = {'NCOMBATH': 2, 'TOTROOMS': 6, 'NUMFRIG': 1, 'MICRO': 1, 'TVCOLOR': 2, 'DESKTOP': 0, 'LGTIN1TO4': 4, 'NHSLDMEM': 2, 'SQFTEST': 1530}
+
 @st.cache_data
 def make_numeric_input(feature):
     label = label_dict.get(feature)
     min_value, max_value = (int(val) for val in values_dict.get(feature).split('-'))
-    return label, min_value, max_value
+    return label, min_value, max_value, defaults_numeric.get(feature)
 
 def record_user_input(feature):
     """
@@ -200,13 +203,18 @@ with tab_appliances:
             record_user_input(feature)
 
 with st.sidebar:
-        if st.button('Estimate my consumption'):
+        if st.button('Estimate my consumption'
+                     , help = '''Estimate my consumption'''
+                     , type = 'primary'):
+
             pred_kwh = api_call(url=url, params=params)
 
             st.metric(label='Your estimated consumption:*', #\n
                           value = f'{int(pred_kwh)} kWh', #
                          delta = None)
 
+            ## celebratory snow ##
+            #st.snow()
 
             with tab_results:
             ############# callback to calculate kWh ################
@@ -226,8 +234,7 @@ with st.sidebar:
                 st.markdown(f'Your estimated yearly bill is between \${round(lower_bound*user_price)}.00 and \${round(upper_bound*user_price)}.00*')
                 st.markdown(f'*based on average values for your state in December 2023. [Source](https://www.energybot.com/electricity-rates-by-state.html#:~:text=The%20Average%20Electricity%20Rate%20in,11.38%20cents%20per%20kilowatt%2Dhour)')
 
-                ## celebratory snow ##
-                st.snow()
+
 
                 ## how do you compare to other households? ##
                 if pred_kwh < 5921:
