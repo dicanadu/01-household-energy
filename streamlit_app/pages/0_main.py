@@ -244,7 +244,7 @@ with st.sidebar:
             for percent_complete in range(100):
                 time.sleep(0.01)
                 my_bar.progress(percent_complete + 1, text=progress_text)
-            time.sleep(1)
+            time.sleep(1.5)
 
             completed_text = "Operation completed!"
             my_bar.empty()  # Clear the progress bar
