@@ -81,6 +81,8 @@ mapped_features = {'TYPEHUQ': {'Mobile home': '1', 'Single-family house detached
 defaults_numeric = {'NCOMBATH': 2, 'TOTROOMS': 6, 'NUMFRIG': 1, 'MICRO': 1, 'TVCOLOR': 2, 'DESKTOP': 0, 'LGTIN1TO4': 4, 'NHSLDMEM': 2, 'SQFTEST': 1530}
 # indices of most frequent categorical value
 categorical_defaults = {'NUMPORTEL': 0, 'TYPEHUQ': 1, 'STORIES': 0, 'YEARMADERANGE': 3, 'WINDOWS': 3, 'SWIMPOOL': 1, 'DISHWASH': 0, 'CWASHER': 0, 'DRYER': 0, 'TELLWORK': 1, 'HEATHOME': 0, 'EQUIPM': 0, 'AIRCOND': 0, 'SMARTMETER': 1, 'SOLAR': 1}
+# boolean defaults for toggle features
+binary_defaults={'SWIMPOOL': False, 'DISHWASH': True, 'CWASHER': True, 'DRYER': True, 'TELLWORK': False, 'HEATHOME': True, 'AIRCOND': True, 'SMARTMETER': False, 'SOLAR': False}
 
 
 @st.cache_data
@@ -108,7 +110,8 @@ def record_user_input(feature):
 
     ##### yes - no features #####
     elif feature in yes_no_features:
-        params[feature] = int(st.toggle(label_dict.get(feature), value=True))
+        params[feature] = int(st.toggle(label=label_dict.get(feature)
+                                        , value=binary_defaults.get(feature)))
 
     ##### features that need a dropdown text #####
     elif feature in selectbox_features:
