@@ -129,10 +129,11 @@ def record_user_input(feature):
 
 ############## tabs - organize features by sections ###############
 
-tab_main, tab_household, tab_appliances = st.tabs(['About your home'
+tab_results, tab_main, tab_household, tab_appliances = st.tabs([
+                                                    'Results'
+                                                    ,'About your home'
                                                    ,'Household characteristics'
                                                     ,'Appliances'
-                                                    #,'Admin'
                                                     ]) #, tab_admin
 
 #############################################
@@ -140,6 +141,8 @@ tab_main, tab_household, tab_appliances = st.tabs(['About your home'
 #############################################
 
 ###### section Main: GEOGRAPHY, ADMIN, basic household (type, no. of persons) ##########
+
+
 
 with tab_main:
 
@@ -198,26 +201,28 @@ with tab_appliances:
         for feature in ['AIRCOND','EQUIPM','HEATHOME' , 'NUMPORTEL']:
             record_user_input(feature)
 
+with st.sidebar:
+        if st.button('Estimate my consumption'):
+            pred_kwh = api_call(url=url, params=params)
+
+
+
+            with tab_results:
+            ############# callback to calculate kWh ################
+            #st.divider()
+                st.metric(label='Your estimated consumption:*', #\n
+                          value = f'{int(pred_kwh)} kWh', #
+                         delta = None)
+                st.markdown(f'*Estimation can vary in the range {round(int(pred_kwh*0.85),-2)} - {round(int(pred_kwh*1.15), -2)} kWh.')
+                st.snow()
+                if pred_kwh < 5921:
+                    st.markdown('Your consumption is below 25% of all U.S. households.')
+                elif pred_kwh > 14155:
+                    st.markdown('Your consumption is above 75% of all U.S. households.')
+                else:
+                    st.markdown('Your consumption is around average of all U.S. households.')
+
+
 #with tab_admin:
 #    st.subheader('Parameters sent to the API:')
 #    st.write(params)
-
-
-
-############# callback to calculate kWh ################
-
-st.divider()
-
-if st.button('Estimate my consumption'):
-    pred_kwh = api_call(url=url, params=params)
-    st.metric(label='Your estimated consumption:*', #\n
-              value = f'{int(pred_kwh)} kWh', #
-             delta = None)
-    st.markdown(f'*Estimation can vary in the range {round(int(pred_kwh*0.85),-2)} - {round(int(pred_kwh*1.15), -2)} kWh.')
-    st.snow()
-    if pred_kwh < 5921:
-        st.markdown('Your consumption is below 25% of all U.S. households.')
-    elif pred_kwh > 14155:
-        st.markdown('Your consumption is above 75% of all U.S. households.')
-    else:
-        st.markdown('Your consumption is around average of all U.S. households.')
