@@ -258,24 +258,6 @@ with tab_appliances:
         for feature in ['EQUIPM']:
             record_user_input(feature)
 
-    #with col1:
-    #    #st.subheader('Living room :tv: :bulb: :computer:')
-    #    for feature in appliance_features:#['DESKTOP','NUMLAPTOP','TVCOLOR','LGTIN1TO4','LGTIN4TO8','LGTINMORE8']:
-    #        if feature in yes_no_features:
-    #            record_user_input(feature)
-##
-    #with col2:
-    #    #st.subheader('Chores :knife_fork_plate:')
-    #    for feature in appliance_features:#['DISHWASH','MICRO','NUMFRIG', 'CWASHER','DRYER']:
-    #        if feature in num_checkbox_features:
-    #            record_user_input(feature)
-##
-    #with col3:
-    #    #st.subheader('Heating and cooling')
-    #    for feature in appliance_features:#['AIRCOND','EQUIPM','HEATHOME' , 'NUMPORTEL']:
-    #        if feature in numeric_features:
-    #            record_user_input(feature)
-
 with st.sidebar:
         toggle_state = st.toggle('Monthly')
         user_price = price_per_state.get(params['state_name'], 0)
@@ -292,8 +274,6 @@ with st.sidebar:
 
             completed_text = "Operation completed!"
             my_bar.empty()  # Clear the progress bar
-            # toggle_state = st.toggle('Monthly')
-            # st.text(completed_text)
             st.balloons()
 
             pred_kwh, pred_kwh_filter = api_call(url=url, params=params, toggle_state=toggle_state)
@@ -306,9 +286,6 @@ with st.sidebar:
             cost_est = st.metric(label=f'Your estimated {pred_kwh_filter} cost:', #\n
                 value = f'${formatted_number}', #
                 delta = None)
-            # monthly_est = st.metric(label='Your estimated monthly consumption:*', #\n
-            #               value = f'{int(pred_kwh)/12} kWh', #
-            #              delta = None)
 
             ## celebratory snow ##
             #st.snow()
@@ -326,10 +303,6 @@ with st.sidebar:
                 kwh_plot = 0
 
                 if toggle_state:
-                    # pred_kwh = api_call(url=url, params=params, toggle_state=toggle_state)
-                    # pred_kwh
-                    # st.write('Monthly')
-                                    # Original
                     kwh_plot += int(pred_kwh)
                     col1, col2 = st.columns(2)
 
@@ -347,8 +320,6 @@ with st.sidebar:
 
 
                 else:
-                    # pred_kwh = api_call(url=url, params=params, toggle_state=toggle_state)
-                    # pred_kwh
                     kwh_plot += int(pred_kwh)
                     col1, col2 = st.columns(2)
 
@@ -364,11 +335,6 @@ with st.sidebar:
                                 delta = None)
 
 
-                # # Original
-                # st.metric(label='Your estimated consumption:*', #\n
-                #           value = f'{int(pred_kwh)} kWh', #
-                #          delta = None)
-
                 ## hard coded confidence interval
                 ci = 0.15
                 lower_bound = round(int(pred_kwh*(1-ci)),-2)
@@ -378,7 +344,7 @@ with st.sidebar:
                 ## price ##
                 user_price = price_per_state.get(params['state_name'], 0)
                 # user_price
-                st.markdown(f'Your estimated yearly bill is between \${round(lower_bound*user_price)}.00 and \${round(upper_bound*user_price)}.00*')
+                st.markdown(f'Your estimated yearly bill is between \${round(lower_bound*user_price)}.00 and \${round(upper_bound*user_price)}.00 [[source]](https://www.energybot.com/electricity-rates-by-state.html#:~:text=The%20Average%20Electricity%20Rate%20in,11.38%20cents%20per%20kilowatt%2Dhour)')
 
 
 
