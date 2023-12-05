@@ -13,18 +13,6 @@ st.set_page_config(page_title='U.S. household electricity consumption'
 
 
 
-# nicer header with html:
-st.markdown("<h2 style='text-align: center; color: #CF5050;'>🇺🇸 U.S. household electricity consumption 🏠</h2>", unsafe_allow_html=True)
-
-st.divider()
-
-st.markdown('''
-
-:rainbow[Welcome!]
-
-This application will estimate your yearly electrical energy consumption (in kWh).
-
-''')
 
 
 ############ initiate parameters for API request ############
