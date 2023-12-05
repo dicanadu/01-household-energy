@@ -128,7 +128,8 @@ def predict(
     AIRCOND: int,
     EQUIPM: int,
     HEATHOME: int,
-    NUMPORTEL: int
+    NUMPORTEL: int,
+    PRICEKWH: float
     ):
     """
      Make a prediction based on user inputs.

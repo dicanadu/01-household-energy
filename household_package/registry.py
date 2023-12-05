@@ -89,7 +89,7 @@ def load_model_locally_log():
     - or from GCS (most recent one) if MODEL_TARGET=='gcs'  --> for unit 02 only
     Return None (but do not Raise) if no model is found
     """
-    latest_model_path_to_save = "./model_h5/loaded/models/baseline_20231204-113850.pkl"
+    latest_model_path_to_save = "./model_h5/loaded/models/baseline_20231205-112649.pkl"
     with open(latest_model_path_to_save , 'rb') as f:
         latest_model = pickle.load(f)
 
