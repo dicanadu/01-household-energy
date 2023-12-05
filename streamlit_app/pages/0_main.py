@@ -38,7 +38,9 @@ params={}
 # url='https://household-predictions-apilog-improved-jaiabuy6eq-ew.a.run.app/predict'
 
 # final
-url="https://household-predictions-final-jaiabuy6eq-ew.a.run.app/predict"
+# url="https://household-predictions-final-jaiabuy6eq-ew.a.run.app/predict"
+# final_2
+url="https://household-predictions-final2-jaiabuy6eq-ew.a.run.app/predict"
 
 @st.cache_data(ttl=3600) # cache data for 1 hour
 # def api_call(url, params):
@@ -118,9 +120,23 @@ appliance_features = ['DESKTOP','NUMLAPTOP','TVCOLOR','LGTIN1TO4','LGTIN4TO8','L
 
 @st.cache_data
 def make_numeric_input(feature):
+    """
+    Convert a categorical feature to numeric input parameters.
+
+    Parameters:
+    - feature (str): The categorical feature for which numeric input parameters are to be generated.
+
+    Returns:
+    tuple: A tuple containing the following numeric input parameters:
+        - label (str): The label associated with the input feature.
+        - min_value (int): The minimum numeric value associated with the feature.
+        - max_value (int): The maximum numeric value associated with the feature.
+        - default_value (int): The default numeric value for the feature, if available.
+    """
     label = label_dict.get(feature)
     min_value, max_value = (int(val) for val in values_dict.get(feature).split('-'))
     return label, min_value, max_value, defaults_numeric.get(feature)
+
 
 def record_user_input(feature):
     """
@@ -137,7 +153,7 @@ def record_user_input(feature):
         params['BA_climate'] = climate_dict.get(params['state_name'])
 
     ##### hard-coded features #####
-    elif feature in ['NHAFBATH','NUMLAPTOP','LGTIN4TO8','LGTINMORE8']:
+    elif feature in ['NHAFBATH','NUMLAPTOP','LGTIN4TO8','LGTINMORE8', 'SMARTMETER']:
         params[feature]=0
 
     ##### yes - no features #####
@@ -188,7 +204,7 @@ def record_user_input_2(feature: str = None, input_type: str = None):
         params['state_name'] = states.get(state_postal)
         params['PRICEKWH'] = price_per_state.get(params['state_name'])
         params['BA_climate'] = climate_dict.get(params['state_name'])
-    elif feature in ['NHAFBATH', 'NUMLAPTOP', 'LGTIN4TO8', 'LGTINMORE8']:
+    elif feature in ['NHAFBATH', 'NUMLAPTOP', 'LGTIN4TO8', 'LGTINMORE8', 'SMARTMETER']:
         # Set default to 0 for specific features
         params[feature] = 0
     elif feature == "NUMPORTEL":
@@ -251,6 +267,7 @@ with tab_main:
     with c1:
         st.markdown(':red[Your house] :house_buildings:')
         record_user_input_2('TYPEHUQ', 'radio')
+        st.markdown(':black[placeholder]')
         record_user_input_2('SQFTEST', 'number_input')
 
     with c2:
@@ -268,10 +285,11 @@ with tab_household:
     col1, col2 = st.columns(2)
 
     with col1:
-        record_user_input_2('SWIMPOOL', 'toggle')
+
         record_user_input_2('TOTROOMS', 'number_input')
         for feature in ['STORIES','YEARMADERANGE']:
             record_user_input_2(feature, 'selectbox')
+        record_user_input_2('HEATHOME', 'toggle')
 
     with col2:
         record_user_input_2('SMARTMETER', 'toggle')
@@ -279,7 +297,7 @@ with tab_household:
             record_user_input_2(feature, 'number_input')
         for feature in ['EQUIPM', 'WINDOWS']:
             record_user_input_2(feature, 'selectbox')
-
+        record_user_input_2('SWIMPOOL', 'toggle')
 # with tab_appliances:
 #     st.subheader('Appliances')
 
@@ -316,22 +334,24 @@ with tab_appliances:
     with col1:
         for feature in ['DESKTOP','NUMLAPTOP', 'MICRO']:
             record_user_input_2(feature, 'number_input')
+        record_user_input_2('NUMPORTEL', 'selectbox')
         for feature in ['CWASHER','AIRCOND']:
             record_user_input_2(feature, 'toggle')
         # record_user_input_2('HEATHOME', 'toggle')
         # record_user_input_2('NUMPORTEL', 'selectbox')
-        record_user_input_2('NUMPORTEL', 'selectbox')
+
 
     with col2:
         for feature in ['TVCOLOR','NUMFRIG']:
+            record_user_input_2(feature, 'number_input')
+        for feature in ['LGTIN1TO4','LGTIN4TO8','LGTINMORE8']:
             record_user_input_2(feature, 'number_input')
         for feature in ['DRYER','DISHWASH']:
             record_user_input_2(feature, 'toggle')
         # record_user_input_2('DISHWASH', 'toggle')
         # record_user_input_2('AIRCOND', 'toggle')
-        for feature in ['LGTIN1TO4','LGTIN4TO8','LGTINMORE8']:
-            record_user_input_2(feature, 'number_input')
-    record_user_input_2('HEATHOME', 'toggle')
+
+
 
 with st.sidebar:
         toggle_state = st.toggle('Monthly')
