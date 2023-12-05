@@ -255,7 +255,7 @@ with tab_main:
     with c1:
         st.markdown(':red[Your house] :house_buildings:')
         record_user_input_2('TYPEHUQ', 'radio')
-        st.markdown(':black[placeholder]')
+        st.markdown(':black[House area]')
         record_user_input_2('SQFTEST', 'number_input')
 
     with c2:
@@ -479,4 +479,4 @@ with st.sidebar:
                 # st.markdown(f"*based on average values for your state in December 2023. [Source](https://www.energybot.com/electricity-rates-by-state.html#:~:text=The%20Average%20Electricity%20Rate%20in,11.38%20cents%20per%20kilowatt%2Dhour)")
 #with tab_admin:
 #    st.subheader('Parameters sent to the API:')
-                st.write(params)
+#                st.write(params)
