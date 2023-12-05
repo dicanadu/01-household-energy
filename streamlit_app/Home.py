@@ -10,7 +10,7 @@ st.set_page_config(page_title='U.S. household electricity consumption'
                    , page_icon='🏠')
 
 # nicer header with html:
-st.markdown("<h2 style='text-align: center; color: #CF5050;'>🇺🇸 U.S. household electricity consumption 🏠</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center; color: #CF5050;'> 🌩️ U.S. household electricity consumption 💡 </h2>", unsafe_allow_html=True)
 
 # trick to center the image is to assign it to middle column
 #with st.columns(3)[1]:

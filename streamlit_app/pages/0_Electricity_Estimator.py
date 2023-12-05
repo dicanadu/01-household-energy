@@ -255,7 +255,7 @@ with tab_main:
     with c1:
         st.markdown(':red[Your house] :house_buildings:')
         record_user_input_2('TYPEHUQ', 'radio')
-        st.markdown(':black[placeholder]')
+        st.markdown(':red[House area] :european_castle:')
         record_user_input_2('SQFTEST', 'number_input')
 
     with c2:
