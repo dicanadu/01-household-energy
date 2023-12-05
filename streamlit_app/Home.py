@@ -13,8 +13,9 @@ st.set_page_config(page_title='U.S. household electricity consumption'
 st.markdown("<h2 style='text-align: center; color: #CF5050;'>🇺🇸 U.S. household electricity consumption 🏠</h2>", unsafe_allow_html=True)
 
 # trick to center the image is to assign it to middle column
-with st.columns(3)[1]:
-    st.image('house.jpg', width=300)
+#with st.columns(3)[1]:
+    #st.image('house.jpg', width=300)
+    #st.markdown("<img alt='David Ayrton / Wikimedia' src='https://upload.wikimedia.org/wikipedia/commons/5/54/House_decorated_with_Christmas_lights_at_Moreton_Hall_-_geograph.org.uk_-_1140703.jpg'")
 
 
 st.markdown('''
@@ -31,7 +32,7 @@ st.markdown('This project is a part of Le Wagon Data Science bootcamp held in Be
 
 st.markdown('Authors: Diego Canales, Richard Kemp, Serkan Sanli, Svetlana Lebedeva.')
 
-st.markdown('[github repository](https://github.com/dicanadu/01-household-energy)')
+st.markdown('[Link to github repository](https://github.com/dicanadu/01-household-energy)')
 
 st.markdown('''
             Data sources:
