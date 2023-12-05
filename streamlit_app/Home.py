@@ -15,7 +15,8 @@ st.markdown("<h2 style='text-align: center; color: #CF5050;'>🇺🇸 U.S. house
 # trick to center the image is to assign it to middle column
 #with st.columns(3)[1]:
     #st.image('house.jpg', width=300)
-    #st.markdown("<img alt='David Ayrton / Wikimedia' src='https://upload.wikimedia.org/wikipedia/commons/5/54/House_decorated_with_Christmas_lights_at_Moreton_Hall_-_geograph.org.uk_-_1140703.jpg'")
+
+st.markdown("<center><img src='https://upload.wikimedia.org/wikipedia/commons/5/54/House_decorated_with_Christmas_lights_at_Moreton_Hall_-_geograph.org.uk_-_1140703.jpg' alt='David Ayrton / Wikimedia' width = 300></center>", unsafe_allow_html=True)
 
 
 st.markdown('''
