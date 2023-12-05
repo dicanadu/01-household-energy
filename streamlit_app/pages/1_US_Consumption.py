@@ -22,10 +22,14 @@ df.loc[:,'Monthly bill'] = round(df['Bill']/12,0).astype(int)
 for col in df.columns:
     df[col] = df[col].astype(str)
 
+#.map("{:,}".format)
 df['text'] = df['State'] + '<br>' + \
+    'Yearly kWh: ' + df['Median yearly kWh'] + '<br>' + \
     'Monthly kWh: ' + df['Monthly kWh'] + '<br>' + \
-    'Respondents: ' + df['Number of responders'] + '<br>' + \
-    'Monthly Bill: $' + df['Monthly bill']
+    'Monthly Bill: $' + df['Monthly bill'] + '<br>' + \
+    'Respondents: ' + df['Number of responders'] #+ '<br>' + \
+
+
 
 
 st.title('US Electricity Consumption')
@@ -39,7 +43,9 @@ fig = go.Figure(data=go.Choropleth(
     # colorscale='thermal',
     colorscale='portland',
     colorbar=dict(title='kWh/year'),
-    text=df['text'], # hover text
+    hovertext=df['text'], # hover text
+    hoverinfo='text',
+    #hoverlabel=#dict for text,bgcolor
     name=''
 ))
 
