@@ -361,6 +361,8 @@ with st.sidebar:
             st.balloons()
 
             pred_kwh, pred_kwh_filter = api_call(url=url, params=params, toggle_state=toggle_state)
+            formatted_pred_kwh_cli = int(pred_kwh)
+            formatted_number_cli = int(pred_kwh)*user_price
             formatted_number = "{:.2f}".format(int(pred_kwh)*user_price)
 
             kwh_est = st.metric(label=f'Your estimated {pred_kwh_filter} consumption:', #\n
@@ -404,11 +406,11 @@ with st.sidebar:
 
                                     ## hard coded confidence interval
                     ci = 0.15
-                    lower_bound = round(int(pred_kwh*(1-ci)),-2)
-                    upper_bound = round(int(pred_kwh*(1+ci)), -2)
-                    st.markdown(f'*Estimation can vary in the range {lower_bound} - {upper_bound} kWh.')
-                    st.markdown(f'Your estimated {pred_kwh_filter} bill is between \${round(lower_bound*user_price)}.00 and \${round(upper_bound*user_price)}.00 [[source]](https://www.energybot.com/electricity-rates-by-state.html#:~:text=The%20Average%20Electricity%20Rate%20in,11.38%20cents%20per%20kilowatt%2Dhour)')
-
+                    lower_bound = 1-ci
+                    upper_bound = 1+ci
+                    st.markdown(f'*Estimation can vary in the range {int(round(formatted_pred_kwh_cli*lower_bound,-1))} - {int(round(formatted_pred_kwh_cli*upper_bound,-1))} kWh.')
+                    # st.markdown(f'Your estimated {pred_kwh_filter} bill is between \${round(lower_bound*user_price)}.00 and \${round(upper_bound*user_price)}.00 [[source]](https://www.energybot.com/electricity-rates-by-state.html#:~:text=The%20Average%20Electricity%20Rate%20in,11.38%20cents%20per%20kilowatt%2Dhour)')
+                    st.markdown(f'Your estimated {pred_kwh_filter} bill is between \${round(formatted_number_cli*lower_bound)}.00 and \${round(formatted_number_cli*upper_bound)}.00 [[source]](https://www.energybot.com/electricity-rates-by-state.html#:~:text=The%20Average%20Electricity%20Rate%20in,11.38%20cents%20per%20kilowatt%2Dhour)')
 
                 else:
                     kwh_plot += int(pred_kwh)
@@ -427,10 +429,11 @@ with st.sidebar:
 
                                     ## hard coded confidence interval
                     ci = 0.15
-                    lower_bound = round(int(pred_kwh*(1-ci)),-2)
-                    upper_bound = round(int(pred_kwh*(1+ci)), -2)
-                    st.markdown(f'*Estimation can vary in the range {lower_bound} - {upper_bound} kWh.')
-                    st.markdown(f'Your estimated {pred_kwh_filter} bill is between \${round(lower_bound*user_price)}.00 and \${round(upper_bound*user_price)}.00 [[source]](https://www.energybot.com/electricity-rates-by-state.html#:~:text=The%20Average%20Electricity%20Rate%20in,11.38%20cents%20per%20kilowatt%2Dhour)')
+                    lower_bound = 1-ci
+                    upper_bound = 1+ci
+                    st.markdown(f'*Estimation can vary in the range {int(round(formatted_pred_kwh_cli*lower_bound,-2))} - {int(round(formatted_pred_kwh_cli*upper_bound,-2))} kWh.')
+                    # st.markdown(f'Your estimated {pred_kwh_filter} bill is between \${round(lower_bound*user_price)}.00 and \${round(upper_bound*user_price)}.00 [[source]](https://www.energybot.com/electricity-rates-by-state.html#:~:text=The%20Average%20Electricity%20Rate%20in,11.38%20cents%20per%20kilowatt%2Dhour)')
+                    st.markdown(f'Your estimated {pred_kwh_filter} bill is between \${round(formatted_number_cli*lower_bound)}.00 and \${round(formatted_number_cli*upper_bound)}.00 [[source]](https://www.energybot.com/electricity-rates-by-state.html#:~:text=The%20Average%20Electricity%20Rate%20in,11.38%20cents%20per%20kilowatt%2Dhour)')
 
 
                 ## hard coded confidence interval
