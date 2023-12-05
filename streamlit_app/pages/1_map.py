@@ -15,6 +15,19 @@ data = {
 
 df = pd.DataFrame(data)
 
+df.loc[:,'Monthly kWh'] = round(df['Median yearly kWh']/12,0).astype(int)
+df.loc[:,'Monthly bill'] = round(df['Bill']/12,0).astype(int)
+
+
+for col in df.columns:
+    df[col] = df[col].astype(str)
+
+df['text'] = df['State'] + '<br>' + \
+    'Monthly kWh: ' + df['Monthly kWh'] + '<br>' + \
+    'Respondents: ' + df['Number of responders'] + '<br>' + \
+    'Monthly Bill: $' + df['Monthly bill']
+
+
 st.title('US Electricity Consumption')
 
 # Create a choropleth map using plotly.graph_objects
@@ -26,7 +39,7 @@ fig = go.Figure(data=go.Choropleth(
     # colorscale='thermal',
     colorscale='portland',
     colorbar=dict(title='kWh/year'),
-    customdata=df['Number of responders'],
+    text=df['text'], # hover text
     name=''
 ))
 
@@ -43,13 +56,13 @@ fig.update_layout(
     )
 )
 
-# TODO average bill per month
 
-fig.update_traces(
-    hovertemplate="<br>".join([
-        "Avg: %{z} kWh",
-        "Responders: %{customdata}",
-    ])
-)
+
+#fig.update_traces(
+#    hovertemplate="<br>".join([
+#        "Avg: %{z} kWh",
+#        "Responders: %{customdata['Number of responders']}",
+#    ])
+#)
 
 st.plotly_chart(fig)
