@@ -13,7 +13,7 @@ user_input = {
   "NHAFBATH": 0,
   "TOTROOMS": 5,
   "WINDOWS": 1,
-  "SWIMPOOL": 0,
+  "SWIMPOOL": 1,
   #"SOLAR": 1,
   "SMARTMETER": 1,
   #"TELLWORK": 1,
@@ -32,15 +32,16 @@ user_input = {
   "EQUIPM": 3,
   "HEATHOME": 1,
   "NUMPORTEL": 0,
-  "PRICEKWH" : 0.5
+  "PRICEKWH" : 0.13
   }
 
 #url = "https://household-predictions-apilog-jaiabuy6eq-ew.a.run.app/predict"
 #url2 = "https://household-predictions-apilog-improved-jaiabuy6eq-ew.a.run.app/predict"
-url3= "http://localhost:8000/predict"
+# url3= "http://localhost:8000/predict"
+url = "https://household-predictions-final-jaiabuy6eq-ew.a.run.app/predict"
 #65print("Im a running")
 
 
-response = requests.get(url3, user_input)
-print(response.content)
-#print(response.json())
+response = requests.get(url, user_input)
+#print(response.content)
+print(response.json())
