@@ -20,7 +20,9 @@ fig = go.Figure(data=go.Choropleth(
     locations=df['State'],
     z=df['Median yearly kWh'],
     locationmode='USA-states',
-    colorscale='Reds',
+    # colorscale='Bergeron',
+    # colorscale='thermal',
+    colorscale='portland',
     colorbar=dict(title='kWh/year'),
     customdata=df['Number of responders']
 ))
@@ -33,7 +35,8 @@ fig.update_layout(
         projection=go.layout.geo.Projection(type='albers usa'),  # Define the projection
         showlakes=False, # no lakes needed
         lakecolor='rgb(75, 178, 255)',
-        bgcolor= 'rgba(0,0,0,0)' #black background
+        bgcolor= 'rgba(0,0,0,0)' #black backgrounds
+        # bgcolor='rgba(0,0,255,0)'  # semi-transparent black background
     )
 )
 
