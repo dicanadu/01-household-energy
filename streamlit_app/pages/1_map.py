@@ -21,12 +21,13 @@ fig = go.Figure(data=go.Choropleth(
     z=df['Median yearly kWh'],
     locationmode='USA-states',
     colorscale='Reds',
-    colorbar=dict(title='Median yearly kWh'),
+    colorbar=dict(title='kWh/year'),
+    customdata=df['Number of responders']
 ))
 
 # Update layout for the map
 fig.update_layout(
-    title='Average consumption per state, kWh',
+    title='Average Electricity Consumption per state',
     geo=dict(
         scope='usa',
         projection=go.layout.geo.Projection(type='albers usa'),  # Define the projection
@@ -34,6 +35,13 @@ fig.update_layout(
         lakecolor='rgb(75, 178, 255)',
         bgcolor= 'rgba(0,0,0,0)' #black background
     )
+)
+
+fig.update_traces(
+    hovertemplate="<br>".join([
+        "Avg: %{z} kWh",
+        "Responders: %{customdata}",
+    ])
 )
 
 st.plotly_chart(fig)
