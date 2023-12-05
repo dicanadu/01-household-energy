@@ -29,6 +29,17 @@ This application will estimate your electrical energy consumption.
 
 st.divider()
 
+st.markdown('''
+**Usage:**
+
+:arrow_left: Navigate to 'main' to estimate consumption for your household
+
+:arrow_left: Navigate to 'map' for per-state summary statistics
+
+''')
+
+st.divider()
+
 st.markdown('This project is a part of Le Wagon Data Science bootcamp held in Berlin in October-December 2023.')
 
 st.markdown('Authors: Diego Canales, Richard Kemp, Serkan Sanli, Svetlana Lebedeva.')
