@@ -26,7 +26,6 @@ This application will estimate your yearly electrical energy consumption (in kWh
 
 ''')
 
-
 ############ initiate parameters for API request ############
 params={}
 
@@ -36,7 +35,10 @@ params={}
 #test_params = {'state_name': 'TX'}
 #url='https://household-predictions-api-jaiabuy6eq-ew.a.run.app/predict'
 #url='https://household-predictions-apilog-jaiabuy6eq-ew.a.run.app/predict'
-url='https://household-predictions-apilog-improved-jaiabuy6eq-ew.a.run.app/predict'
+# url='https://household-predictions-apilog-improved-jaiabuy6eq-ew.a.run.app/predict'
+
+# final
+url="https://household-predictions-final-jaiabuy6eq-ew.a.run.app/predict"
 
 @st.cache_data(ttl=3600) # cache data for 1 hour
 # def api_call(url, params):
@@ -56,14 +58,6 @@ def api_call(url, params, toggle_state):
         pred_kwh_filter = "annual"
     # output prediction:
     return result, pred_kwh_filter
-
-# Get the toggle state
-# toggle_state = st.checkbox("Toggle State")
-
-# Call the API with the updated function
-# prediction = api_call(url, params, toggle_state)
-
-
 
 ########### hard-coded constants ###############
 
@@ -122,7 +116,6 @@ appliance_features = ['DESKTOP','NUMLAPTOP','TVCOLOR','LGTIN1TO4','LGTIN4TO8','L
 
 ############# functions ############
 
-
 @st.cache_data
 def make_numeric_input(feature):
     label = label_dict.get(feature)
@@ -139,6 +132,7 @@ def record_user_input(feature):
     if feature=='state_name':
         state_postal = st.selectbox('Select your state:', states.keys(), 4)
         params['state_name'] = states.get(state_postal)
+        params['PRICEKWH'] = price_per_state.get(params['state_name'])
         #params['REGIONC'] = state_to_region.get(params['state_name'])
         params['BA_climate'] = climate_dict.get(params['state_name'])
 
@@ -173,8 +167,62 @@ def record_user_input(feature):
                                   options=mapped_features.get(feature).keys())
         params[feature] = int(mapped_features.get(feature).get(user_value))
 
+def record_user_input_2(feature: str = None, input_type: str = None):
+    """
+    Records user input based on the specified feature and input type.
 
+    Parameters:
+    - feature (str): The feature for which user input is recorded.
+    - input_type (str): The type of input method to be used. Possible values include:
+        - "selectbox": Handle input with a selectbox (dropdown).
+        - "radio": Handle input with radio buttons (single-select).
+        - "number_input": Handle input with a numeric input field.
+        - "toggle": Handle input with a toggle switch (0/1 switch).
 
+    Returns:
+    None
+    """
+    if feature == 'state_name':
+        # Handle state_name input
+        state_postal = st.selectbox('Select your state:', states.keys(), 4)
+        params['state_name'] = states.get(state_postal)
+        params['PRICEKWH'] = price_per_state.get(params['state_name'])
+        params['BA_climate'] = climate_dict.get(params['state_name'])
+    elif feature in ['NHAFBATH', 'NUMLAPTOP', 'LGTIN4TO8', 'LGTINMORE8']:
+        # Set default to 0 for specific features
+        params[feature] = 0
+    elif feature == "NUMPORTEL":
+        # Handle NUMPORTEL input using a selectbox
+        user_value = st.selectbox(label=label_dict.get(feature),
+                                  options=mapped_features.get(feature).keys())
+        params[feature] = int(mapped_features.get(feature).get(user_value))
+    elif input_type == "selectbox" or input_type == "radio":
+        # Handle selectbox (dropdown) or radio (single-select) input type
+        options = None
+        index = None
+
+        if feature in num_checkbox_features:
+            options = mapped_features.get(feature).keys()
+            index = categorical_defaults.get(feature)
+
+        elif feature in values_dict:
+            options = values_dict.get(feature).split('\n')
+
+        elif feature in mapped_features:
+            options = mapped_features.get(feature).keys()
+
+        if options is not None:
+            user_value = st.selectbox(label=label_dict.get(feature),
+                                      options=options,
+                                      index=index)
+            params[feature] = int(mapped_features.get(feature).get(user_value))
+    elif input_type == "number_input":
+        # Handle number_input (enter a num) input type
+        params[feature] = int(st.number_input(*make_numeric_input(feature)))
+    elif input_type == "toggle":
+        # Handle toggle (0/1 switch) input type
+        params[feature] = int(st.toggle(label=label_dict.get(feature),
+                                        value=binary_defaults.get(feature)))
 
 ############## tabs - organize features by sections ###############
 
@@ -202,65 +250,93 @@ with tab_main:
 
     with c1:
         st.markdown(':red[Your house] :house_buildings:')
-        for feature in ['TYPEHUQ', 'SQFTEST']:
-            record_user_input(feature)
+        record_user_input_2('TYPEHUQ', 'radio')
+        record_user_input_2('SQFTEST', 'number_input')
 
     with c2:
         st.markdown(':red[Your people] 👨‍👩‍👧‍👧')
-        for feature in ['NHSLDMEM']: #, 'TELLWORK'
-            record_user_input(feature)
+        record_user_input_2('NHSLDMEM', 'number_input')
 
         st.markdown(':red[Your location] :world_map:')
-        record_user_input('state_name')
+        record_user_input_2('state_name', 'selectbox')
 
 
 ###### section HOUSEHOLD CHARACTERISTICS ######
 with tab_household:
     st.subheader('Your household')
 
-    col1, col2, col3 = st.columns(3)
+    col1, col2 = st.columns(2)
 
-    #,'ROOFTYPE',  'WALLTYPE',
-    household_features = ['STORIES','YEARMADERANGE','NCOMBATH',
-                            'NHAFBATH','TOTROOMS','WINDOWS', 'SWIMPOOL',# 'SOLAR',
-                            'SMARTMETER']
     with col1:
-        for feature in ['STORIES','YEARMADERANGE', 'WINDOWS']:
-            record_user_input(feature)
+        record_user_input_2('SWIMPOOL', 'toggle')
+        record_user_input_2('TOTROOMS', 'number_input')
+        for feature in ['STORIES','YEARMADERANGE']:
+            record_user_input_2(feature, 'selectbox')
 
     with col2:
-        for feature in ['NCOMBATH', 'NHAFBATH','TOTROOMS']:
-            record_user_input(feature)
+        record_user_input_2('SMARTMETER', 'toggle')
+        for feature in ['NCOMBATH', 'NHAFBATH']:
+            record_user_input_2(feature, 'number_input')
+        for feature in ['EQUIPM', 'WINDOWS']:
+            record_user_input_2(feature, 'selectbox')
 
-    with col3:
-        for feature in ['SWIMPOOL', 'SMARTMETER']:
-            record_user_input(feature)
+# with tab_appliances:
+#     st.subheader('Appliances')
+
+#     col1, col2 = st.columns(2)
+
+
+#     with col1:
+#         #st.subheader('Living room :tv: :bulb: :computer:')
+#         for feature in ['DESKTOP','NUMLAPTOP','TVCOLOR','LGTIN1TO4','LGTIN4TO8','LGTINMORE8','MICRO','NUMFRIG', 'NUMPORTEL']:
+#             record_user_input(feature)
+
+#     with col2:
+#         #st.subheader('Chores :knife_fork_plate:')
+#         for feature in ['DISHWASH', 'CWASHER','DRYER', 'AIRCOND', 'HEATHOME' ]:
+#             record_user_input(feature)
 
 
 with tab_appliances:
     st.subheader('Appliances')
 
-    col1, col2, col3 = st.columns(3)
+    col1, col2 = st.columns(2) # changing from 3 to 2 columns
 
+
+#     with col1:
+#         #st.subheader('Living room :tv: :bulb: :computer:')
+#         for feature in ['DESKTOP','NUMLAPTOP','TVCOLOR','LGTIN1TO4','LGTIN4TO8','LGTINMORE8','MICRO','NUMFRIG', 'NUMPORTEL']:
+#             record_user_input(feature)
+
+#     with col2:
+#         #st.subheader('Chores :knife_fork_plate:')
+#         for feature in ['DISHWASH', 'CWASHER','DRYER', 'AIRCOND', 'HEATHOME' ]:
+#             record_user_input(feature)
 
     with col1:
-        #st.subheader('Living room :tv: :bulb: :computer:')
-        for feature in ['DESKTOP','NUMLAPTOP','TVCOLOR','LGTIN1TO4','LGTIN4TO8','LGTINMORE8','MICRO','NUMFRIG', 'NUMPORTEL']:
-            record_user_input(feature)
+        for feature in ['DESKTOP','NUMLAPTOP', 'MICRO']:
+            record_user_input_2(feature, 'number_input')
+        for feature in ['CWASHER','AIRCOND']:
+            record_user_input_2(feature, 'toggle')
+        # record_user_input_2('HEATHOME', 'toggle')
+        # record_user_input_2('NUMPORTEL', 'selectbox')
+        record_user_input_2('NUMPORTEL', 'selectbox')
 
     with col2:
-        #st.subheader('Chores :knife_fork_plate:')
-        for feature in ['DISHWASH', 'CWASHER','DRYER', 'AIRCOND', 'HEATHOME' ]:
-            record_user_input(feature)
-
-    with col3:
-        #st.subheader('Heating and cooling')
-        for feature in ['EQUIPM']:
-            record_user_input(feature)
+        for feature in ['TVCOLOR','NUMFRIG']:
+            record_user_input_2(feature, 'number_input')
+        for feature in ['DRYER','DISHWASH']:
+            record_user_input_2(feature, 'toggle')
+        # record_user_input_2('DISHWASH', 'toggle')
+        # record_user_input_2('AIRCOND', 'toggle')
+        for feature in ['LGTIN1TO4','LGTIN4TO8','LGTINMORE8']:
+            record_user_input_2(feature, 'number_input')
+    record_user_input_2('HEATHOME', 'toggle')
 
 with st.sidebar:
         toggle_state = st.toggle('Monthly')
-        user_price = price_per_state.get(params['state_name'], 0)
+        user_price = params['PRICEKWH']
+        #price_per_state.get(params['state_name'], 0)
         if st.button('Estimate my consumption'
                      , help = '''Estimate my consumption'''
                      , type = 'primary'):
@@ -268,9 +344,9 @@ with st.sidebar:
             my_bar = st.progress(0, text=progress_text)
 
             for percent_complete in range(100):
-                time.sleep(0.1)
+                time.sleep(0.01)
                 my_bar.progress(percent_complete + 1, text=progress_text)
-            time.sleep(2)
+            time.sleep(1.5)
 
             completed_text = "Operation completed!"
             my_bar.empty()  # Clear the progress bar
@@ -395,4 +471,4 @@ with st.sidebar:
                 st.markdown(f"*based on average values for your state in December 2023. [Source](https://www.energybot.com/electricity-rates-by-state.html#:~:text=The%20Average%20Electricity%20Rate%20in,11.38%20cents%20per%20kilowatt%2Dhour)")
 #with tab_admin:
 #    st.subheader('Parameters sent to the API:')
-#    st.write(params)
+                # st.write(params)
