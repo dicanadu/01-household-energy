@@ -10,7 +10,7 @@ def preprocessing(X_train):
             "TOTAL_BATH", "TOTAL_COMP", "TOTAL_LIGHT" ]
 
     min_max = MinMaxScaler()
-    ohe = OneHotEncoder(sparse_output=False, handle_unknown='ignore')
+    ohe = OneHotEncoder(sparse_output=False, handle_unknown='ignore',drop="first")
 
 
     preprocessor = ColumnTransformer(transformers=[

@@ -15,6 +15,8 @@ def filter_data(df,min_perc=0.005, max_perc=0.995):
 
     # Filter the DataFrame based on the specified percentiles
     df = df[(df['KWH'] >= percentile_min) & (df['KWH'] <= percentile_max)]
+    df = df[(df['PRICEKWH'] > 0.01) & (df['PRICEKWH'] <= 0.9)]
+
     return df
 
 

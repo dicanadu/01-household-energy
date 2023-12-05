@@ -8,6 +8,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from household_package.clean import clean_data
 from household_package.clean import clean_data_without
+from household_package.clean import clean_data_improved
 from household_package.registry import load_model
 from household_package.registry import load_model_locally
 from household_package.registry import load_model_locally_log
@@ -24,11 +25,19 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-# @app.get("/")
-# def root():
-#     # $CHA_BEGIN
-#     return dict(greeting="Hello")
-#     # $CHA_END
+@app.get("/")
+def root():
+    root_dict = {
+    "api_version": "1.0",
+    "endpoints": {
+        "predict": {
+        "url": "/predict",
+        "description": "Endpoint for retrieving kwh predictions",
+        "methods": ["GET"]
+            }
+        }
+    }
+    return root_dict
 
 # #Predict baseline
 # @app.get("/predict")
@@ -92,7 +101,7 @@ def predict(
     TYPEHUQ: int,
     NHSLDMEM: int,
     state_name: str,
-    REGIONC: str,
+    #REGIONC: str,
     BA_climate: str,
     SQFTEST: int,
     STORIES: int,
@@ -102,9 +111,9 @@ def predict(
     TOTROOMS: int,
     WINDOWS: int,
     SWIMPOOL: int,
-    SOLAR: int,
+    #SOLAR: int,
     SMARTMETER: int,
-    TELLWORK: int,
+    #TELLWORK: int,
     DESKTOP: int,
     NUMLAPTOP: int,
     TVCOLOR: int,
@@ -119,7 +128,8 @@ def predict(
     AIRCOND: int,
     EQUIPM: int,
     HEATHOME: int,
-    NUMPORTEL: int
+    NUMPORTEL: int,
+    PRICEKWH: float
     ):
     """
      Make a prediction based on user inputs.
@@ -130,13 +140,14 @@ def predict(
     #params = dict(request.query_params)
     params = locals()
     X_new = pd.DataFrame(params, index=[0])
-    X_new = clean_data_without(X_new)
+    X_new = clean_data_improved(X_new)
     ##### Create new dataframe from user inputs ######
     #X_new = pd.DataFrame({k:[int(v) if v.isdigit() else v] for k,v in params.items()})
 
     # # ## clean the dataframe
     y_pred = app.state.model.predict(X_new)[0]
     y_pred = np.exp(y_pred)
+    #print("Im a running")
 
     return {"KWH": y_pred}
     #return params

@@ -1,7 +1,7 @@
 from sklearn.linear_model import LinearRegression
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.preprocessing import RobustScaler
+from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.pipeline import Pipeline
 
@@ -68,15 +68,19 @@ def baseline_model_improved(X_train, y_train):
 
     to_scale = ["NUMPORTEL", "STORIES","SQFTEST",
                 "TOTROOMS", "NUMFRIG", "MICRO", "TVCOLOR","NHSLDMEM",
-                "TOTAL_BATH", "TOTAL_COMP", "TOTAL_LIGHT", "PRICEKWH" ]
+                "TOTAL_BATH", "TOTAL_COMP", "TOTAL_LIGHT" ]
+
+    to_standard = ["PRICEKWH"]
 
     min_max = MinMaxScaler()
     ohe = OneHotEncoder(sparse_output=False, handle_unknown='ignore', drop="first")
+    std = StandardScaler()
 
 
     preprocessor = ColumnTransformer(transformers=[
                                                 ('min_max', min_max, to_scale),
-                                                ('ohe', ohe, to_ohe_encode)],
+                                                ('ohe', ohe, to_ohe_encode),
+                                                ('std', std, to_standard)],
                                                 remainder = "passthrough")
 
     model = LinearRegression()

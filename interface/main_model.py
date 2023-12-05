@@ -21,16 +21,16 @@ import numpy as np
 
 #This is a model without two features and with the log
 df = call_data_url()
-df = filter_data(df)
 df["PRICEKWH"] =  df["DOLLAREL"] /df["KWH"]
+df = filter_data(df)
 df = clean_data_improved(df)
 print(df.columns)
 
-#columns = ["WALLTYPE", "ROOFTYPE", "TELLWORK", "REGIONC", "SOLAR"]
+#columns = ["WALLTYPE", "ROOFTYPE", "TELLWORK", "REGIONC", "SOLAR", "DOLLAREL"]
 #df = df.drop(columns , axis =1 )
 
 X , y = get_xy(df)
-#print(X.columns)
+print(X.columns)
 
 X_train , X_test, y_train, y_test = train_test_split(X , y , test_size=0.3)
 print(X_train.columns)
@@ -38,19 +38,20 @@ print(X_train.columns)
 y_train_p = np.log(y_train.astype("float"))
 y_test_p = np.log(y_test.astype("float"))
 
-#model = baseline_model_improved(X_train, y_train_p)
+model = baseline_model_improved(X_train, y_train_p)
 
 # print(model.score(X_test, y_test_p))
-# print(cross_validate(model, X_train, y_train_p)["test_score"].mean())
+print(cross_validate(model, X_train, y_train_p)["test_score"].mean())
 
 #To be used when saving a new model
 #save_model(model)
 
 model_new = load_model()
+print(model_new.score(X_test, y_test_p))
 
 
 print(cross_validate(model_new, X_train, y_train_p)["test_score"].mean())
 
 
-# for x , y  in zip(model_new[:-1].get_feature_names_out() ,model_new.named_steps["model"].coef_):
-#     print(x , y)
+for x , y  in zip(model_new[:-1].get_feature_names_out() ,model_new.named_steps["model"].coef_):
+    print(x , y)
