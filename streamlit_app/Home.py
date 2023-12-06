@@ -28,9 +28,9 @@ st.divider()
 st.markdown('''
 **Usage:**
 
-:arrow_left: Navigate to 'Electricity Estimator' to estimate consumption for your household
+:arrow_left: Navigate to [Electricity Estimator](https://us-electricity-calculator.streamlit.app/Electricity_Estimator) to estimate consumption for your household
 
-:arrow_left: Navigate to 'US Consumption' for per-state summary statistics
+:arrow_left: Navigate to [US Consumption](https://us-electricity-calculator.streamlit.app/US_Consumption) for per-state summary statistics
 
 ''')
 
