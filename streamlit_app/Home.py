@@ -1,4 +1,8 @@
 import streamlit as st
+from datetime import datetime
+
+# Get the current date
+current_date = datetime.now()
 
 # TODO
 # nice image + source
@@ -12,8 +16,11 @@ st.set_page_config(page_title='U.S. household electricity consumption'
 # nicer header with html:
 st.markdown("<h2 style='text-align: center; color: #CF5050;'> 🌩️ U.S. household electricity consumption 💡 </h2>", unsafe_allow_html=True)
 
-st.markdown("<center><img src='https://upload.wikimedia.org/wikipedia/commons/5/54/House_decorated_with_Christmas_lights_at_Moreton_Hall_-_geograph.org.uk_-_1140703.jpg' alt='David Ayrton / Wikimedia' width = 300></center>", unsafe_allow_html=True)
-
+# Check if the month is November or December
+if current_date.month in [11, 12]:
+    st.markdown("<center><img src='https://upload.wikimedia.org/wikipedia/commons/5/54/House_decorated_with_Christmas_lights_at_Moreton_Hall_-_geograph.org.uk_-_1140703.jpg' alt='David Ayrton / Wikimedia' width = 300></center>", unsafe_allow_html=True)
+else:
+    st.markdown("<center><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Las_Vegas_%28Nevada%2C_USA%29%2C_The_Strip_--_2012_--_6232.jpg/320px-Las_Vegas_%28Nevada%2C_USA%29%2C_The_Strip_--_2012_--_6232.jpg' alt='Dietmar Rabich / Wikimedia' width = 300></center>", unsafe_allow_html=True)
 
 st.markdown('''
 
