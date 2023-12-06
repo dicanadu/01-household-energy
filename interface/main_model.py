@@ -38,10 +38,10 @@ print(X_train.columns)
 y_train_p = np.log(y_train.astype("float"))
 y_test_p = np.log(y_test.astype("float"))
 
-model = baseline_model_improved(X_train, y_train_p)
+#model = baseline_model_improved(X_train, y_train_p)
 
 # print(model.score(X_test, y_test_p))
-print(cross_validate(model, X_train, y_train_p)["test_score"].mean())
+#print(cross_validate(model, X_train, y_train_p)["test_score"].mean())
 
 #To be used when saving a new model
 #save_model(model)
