@@ -451,12 +451,18 @@ with st.sidebar:
 
 
                 ## how do you compare to other households? ##
-                if pred_kwh < 5921:
-                    st.markdown('Your consumption is below 25% of all U.S. households.')
-                elif pred_kwh > 14155:
-                    st.markdown('Your consumption is above 75% of all U.S. households.')
+
+                breakdown_per_state={'Alabama': [1560.0, 8860.0, 13260.0, 17910.0, 37120.0], 'Alaska': [1450.0, 4330.0, 6810.0, 10090.0, 25870.0], 'Arizona': [1430.0, 8300.0, 12630.0, 17690.0, 34520.0], 'Arkansas': [1300.0, 8560.0, 12150.0, 16970.0, 37100.0], 'California': [1190.0, 3800.0, 5870.0, 8910.0, 31610.0], 'Colorado': [1250.0, 4910.0, 7360.0, 11220.0, 30970.0], 'Connecticut': [1230.0, 4680.0, 7280.0, 10720.0, 30280.0], 'Delaware': [1200.0, 7190.0, 10100.0, 14300.0, 35390.0], 'District of Columbia': [1420.0, 4330.0, 6410.0, 9570.0, 23250.0], 'Florida': [1430.0, 8910.0, 12750.0, 17880.0, 36260.0], 'Georgia': [2000.0, 8280.0, 12400.0, 16950.0, 37150.0], 'Hawaii': [1190.0, 4740.0, 7640.0, 11420.0, 36880.0], 'Idaho': [1550.0, 6600.0, 9690.0, 14470.0, 36800.0], 'Illinois': [1230.0, 5010.0, 7910.0, 11230.0, 32860.0], 'Indiana': [1850.0, 6570.0, 10010.0, 15150.0, 37710.0], 'Iowa': [1920.0, 6260.0, 9260.0, 13250.0, 35060.0], 'Kansas': [1240.0, 6480.0, 10390.0, 13750.0, 34370.0], 'Kentucky': [1520.0, 8220.0, 12150.0, 17660.0, 35230.0], 'Louisiana': [2360.0, 9870.0, 13940.0, 18420.0, 36940.0], 'Maine': [1520.0, 4500.0, 6580.0, 9200.0, 32060.0], 'Maryland': [1910.0, 6900.0, 10130.0, 15380.0, 37410.0], 'Massachusetts': [1210.0, 4610.0, 6660.0, 10450.0, 32370.0], 'Michigan': [1210.0, 5180.0, 7420.0, 10580.0, 37830.0], 'Minnesota': [1210.0, 5500.0, 8470.0, 12020.0, 36280.0], 'Mississippi': [2520.0, 9440.0, 13250.0, 18720.0, 32940.0], 'Missouri': [1740.0, 7400.0, 10990.0, 15630.0, 34030.0], 'Montana': [1360.0, 4910.0, 8320.0, 12800.0, 36230.0], 'Nebraska': [1220.0, 6300.0, 9920.0, 14160.0, 35490.0], 'Nevada': [2610.0, 7040.0, 9930.0, 14190.0, 35450.0], 'New Hampshire': [1220.0, 4560.0, 6630.0, 9980.0, 24320.0], 'New Jersey': [1350.0, 5250.0, 7780.0, 11400.0, 30600.0], 'New Mexico': [1340.0, 4930.0, 7530.0, 10390.0, 24100.0], 'New York': [1190.0, 4080.0, 6380.0, 9770.0, 37860.0], 'North Carolina': [1700.0, 7980.0, 11820.0, 15580.0, 37460.0], 'North Dakota': [1260.0, 6860.0, 10280.0, 15460.0, 37440.0], 'Ohio': [1380.0, 6060.0, 9050.0, 13720.0, 38010.0], 'Oklahoma': [1350.0, 8150.0, 11970.0, 18000.0, 37040.0], 'Oregon': [1230.0, 6580.0, 9700.0, 14480.0, 34600.0], 'Pennsylvania': [1370.0, 5630.0, 9170.0, 13630.0, 36920.0], 'Rhode Island': [1290.0, 4460.0, 7000.0, 9210.0, 27050.0], 'South Carolina': [1720.0, 8320.0, 12130.0, 17070.0, 33860.0], 'South Dakota': [1910.0, 6140.0, 9720.0, 14750.0, 33350.0], 'Tennessee': [1880.0, 9490.0, 12840.0, 17650.0, 37630.0], 'Texas': [1500.0, 8700.0, 12670.0, 17460.0, 37410.0], 'Utah': [1870.0, 6230.0, 8970.0, 11800.0, 29770.0], 'Vermont': [1300.0, 4210.0, 6380.0, 9130.0, 22660.0], 'Virginia': [1200.0, 7880.0, 11920.0, 16610.0, 35610.0], 'Washington': [1230.0, 6460.0, 9740.0, 14140.0, 37560.0], 'West Virginia': [1560.0, 8160.0, 11190.0, 18630.0, 37930.0], 'Wisconsin': [1770.0, 5640.0, 7350.0, 10850.0, 29670.0], 'Wyoming': [1190.0, 5090.0, 7860.0, 11750.0, 32540.0]}
+                quartiles = breakdown_per_state.get(params['state_name'])
+
+                if pred_kwh < quartiles[1]:
+                    st.markdown('Your consumption is below 25% of U.S. households in your state.')
+                elif pred_kwh > quartiles[3]:
+                    st.markdown('Your consumption is above 75% of U.S. households in your state.')
+                elif (pred_kwh >= quartiles[1]) & (pred_kwh > quartiles[2]):
+                    st.markdown('Your consumption is between 25% and 50% of U.S. households in your state.')
                 else:
-                    st.markdown('Your consumption is around average of all U.S. households.')
+                    st.markdown('Your consumption is between 50% and 75% of U.S. households in your state.')
 
                 # plot_lower = 1186
                 # plot_upper = 38007
