@@ -13,8 +13,8 @@ current_date = datetime.now()
 st.set_page_config(page_title='U.S. household electricity consumption'
                    , page_icon='🏠')
 
-# nicer header with html:
-st.markdown("<h2 style='text-align: center; color: #CF5050;'> 🌩️ U.S. household electricity consumption 💡 </h2>", unsafe_allow_html=True)
+# nicer header with html: #CF5050
+st.markdown("<h2 style='text-align: center; '> 🌩️ U.S. household electricity consumption 💡 </h2>", unsafe_allow_html=True)
 
 # Check if the month is November or December
 if current_date.month in [11, 12]:
@@ -30,7 +30,9 @@ st.markdown('''
 
 :rainbow[Welcome!]
 
-This application will estimate your electrical energy consumption.
+Living in or moving to the U.S.? Planning to buy a house? Wondering about your electricity bill?
+
+This application will estimate your electrical energy consumption!
 
 ''')
 

@@ -8,8 +8,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 ########## page info ############
 
-st.set_page_config(page_title='U.S. household electricity consumption'
-                   , page_icon='🏠')
+st.set_page_config(page_title='Electricity estimator'
+                   , page_icon=':bulb:')
 
 ############ initiate parameters for API request ############
 params={}
@@ -45,7 +45,6 @@ geo_features = ['state_name']#, 'REGIONC'] # inferred
 selectbox_features=[]
 numeric_features=['NCOMBATH', 'NHAFBATH', 'TOTROOMS', 'NUMFRIG', 'MICRO', 'TVCOLOR', 'DESKTOP', 'NUMLAPTOP', 'LGTIN1TO4', 'LGTIN4TO8', 'LGTINMORE8', 'NHSLDMEM', 'SQFTEST']
 numeric_features_dropdown = ['NUMPORTEL'] # numeric
-#num_checkbox_features = ['TYPEHUQ', 'STORIES', 'YEARMADERANGE', 'WALLTYPE', 'ROOFTYPE', 'WINDOWS', 'SWIMPOOL', 'DISHWASH', 'CWASHER', 'DRYER', 'TELLWORK', 'HEATHOME', 'EQUIPM', 'AIRCOND', 'SMARTMETER', 'SOLAR']
 num_checkbox_features = ['YEARMADERANGE', 'EQUIPM', 'WINDOWS', 'ROOFTYPE', 'WALLTYPE', 'TYPEHUQ', 'STORIES']
 
 
@@ -54,7 +53,6 @@ yes_no_features = ['SWIMPOOL', 'DISHWASH', 'CWASHER', 'DRYER', 'TELLWORK', 'HEAT
 
 ########### dictionary of mappings ################
 
-#mapped_features = {'TYPEHUQ': {'Mobile home': '1', 'Single-family house detached from any other house ': '2', 'Single-family house attached to one or more other houses (for example: duplex, row house, or townhome)': '3', 'Apartment in a building with 2 to 4 units': '4', 'Apartment in a building with 5 or more units': '5'}, 'STORIES': {'One story': '1', 'Two stories': '2', 'Three stories': '3', 'Four or more stories': '4', 'Split-level': '5'}, 'YEARMADERANGE': {'Before 1950': '1', '1950 to 1959': '2', '1960 to 1969': '3', '1970 to 1979': '4', '1980 to 1989': '5', '1990 to 1999': '6', '2000 to 2009': '7', '2010 to 2015': '8', '2016 to 2020': '9'}, 'WALLTYPE': {'Brick': '1', 'Wood': '2', 'Siding (aluminum, fiber cement, vinyl, or steel) ': '3', 'Stucco': '4', 'Shingle (composition)': '5', 'Stone ': '6', 'Concrete block ': '7', 'Other': '99'}, 'ROOFTYPE': {'Ceramic or clay tiles': '1', 'Wood shingles/shakes': '2', 'Metal': '3', 'Slate or synthetic slate': '4', 'Shingles (composition or asphalt)': '5', 'Concrete tiles': '6', 'Other': '99'}, 'WINDOWS': {'1 or 2 windows': '1', '3 to 5 windows': '2', '6 to 9 windows': '3', '10 to 15 windows': '4', '16 to 19 windows': '5', '20 to 29 windows': '6', '30 or more windows': '7'}, 'SWIMPOOL': {'Yes': '1', 'No': '0'}, 'DISHWASH': {'Yes': '1', 'No': '0'}, 'CWASHER': {'Yes': '1', 'No': '0'}, 'DRYER': {'Yes': '1', 'No': '0'}, 'TELLWORK': {'Yes': '1', 'No': '0'}, 'HEATHOME': {'Yes': '1', 'No': '0'}, 'EQUIPM': {'Central furnace ': '3', 'Steam or hot water system with radiators or pipes ': '2', 'Central heat pump': '4', 'Ductless heat pump, also known as a “mini-split”': '13', 'Built-in electric units installed in walls, ceilings, baseboards, or floors': '5', 'Built-in room heater burning gas or oil': '7', 'Wood or pellet stove ': '8', 'Portable electric heaters': '10', 'Other ': '99'}, 'AIRCOND': {'Yes': '1', 'No': '0'}, 'SMARTMETER': {'Yes': '1', 'No': '0'}, 'SOLAR': {'Yes': '1', 'No': '0'}, 'NUMPORTEL': {'0': '0', '1': '1', '2': '2', '3': '3', '4': '4', '5': '5', '6': '6', '7': '7', '8': '8', '9': '9'}}
 mapped_features = {'TYPEHUQ': {'Mobile home': '1', 'Single-family house detached from any other house ': '2', 'Single-family house attached to one or more other houses': '3', 'Apartment in a building with 2 to 4 units': '4', 'Apartment in a building with 5 or more units': '5'}, 'STORIES': {'One story': '1', 'Two stories': '2', 'Three stories': '3', 'Four or more stories': '4', 'Split-level': '5'}, 'YEARMADERANGE': {'Before 1950': '1', '1950 to 1959': '2', '1960 to 1969': '3', '1970 to 1979': '4', '1980 to 1989': '5', '1990 to 1999': '6', '2000 to 2009': '7', '2010 to 2015': '8', '2016 to 2020': '9'}, 'WINDOWS': {'1 or 2 windows': '1', '3 to 5 windows': '2', '6 to 9 windows': '3', '10 to 15 windows': '4', '16 to 19 windows': '5', '20 to 29 windows': '6', '30 or more windows': '7'}, 'SWIMPOOL': {'Yes': '1', 'No': '0'}, 'DISHWASH': {'Yes': '1', 'No': '0'}, 'CWASHER': {'Yes': '1', 'No': '0'}, 'DRYER': {'Yes': '1', 'No': '0'}, 'TELLWORK': {'Yes': '1', 'No': '0'}, 'HEATHOME': {'Yes': '1', 'No': '0'}, 'EQUIPM': {'Central furnace ': '3', 'Steam or hot water system': '2', 'Central heat pump': '4', 'Ductless heat pump': '13', 'Built-in electric units': '5', 'Built-in room heater': '7', 'Wood or pellet stove ': '8', 'Portable electric heaters': '10', 'Other ': '99'}, 'AIRCOND': {'Yes': '1', 'No': '0'}, 'SMARTMETER': {'Yes': '1', 'No': '0'}, 'SOLAR': {'Yes': '1', 'No': '0'}, 'NUMPORTEL': {'0': '0', '1': '1', '2': '2', '3': '3', '4': '4', '5': '5', '6': '6', '7': '7', '8': '8', '9': '9'}}
 
 ############# default values (and indices) #########
@@ -291,17 +289,17 @@ with tab_main:
     c1, c2 = st.columns(2)
 
     with c1:
-        st.markdown(':red[Your house] :house_buildings:')
-        record_user_input('TYPEHUQ', 'radio')
-        st.markdown(':red[House area] :european_castle:')
-        record_user_input('SQFTEST', 'number_input')
+        #st.markdown(':red[Your house] :house_buildings:')
+        record_user_input_2('TYPEHUQ', 'radio')
+        #st.markdown(':red[House area] :european_castle:')
+        record_user_input_2('SQFTEST', 'number_input')
 
     with c2:
-        st.markdown(':red[Your people] 👨‍👩‍👧‍👧')
-        record_user_input('NHSLDMEM', 'number_input')
+        #st.markdown(':red[Your people] 👨‍👩‍👧‍👧')
+        record_user_input_2('NHSLDMEM', 'number_input')
 
-        st.markdown(':red[Your location] :world_map:')
-        record_user_input('state_name', 'selectbox')
+        #st.markdown(':red[Your location] :world_map:')
+        record_user_input_2('state_name', 'selectbox')
 
 
 ###### section HOUSEHOLD CHARACTERISTICS ######
@@ -405,7 +403,7 @@ with st.sidebar:
                         st.metric(label=f'Your estimated {pred_kwh_filter} cost:', #\n
                                 value = f'${formatted_number}', #
                                 delta = None)
-                        st.markdown(f'''Estimated between: \${round(formatted_number_cli*lower_bound)}.00 - \${round(formatted_number_cli*upper_bound)}.00''')
+                        st.markdown(f'''Estimated between: \${round(formatted_number_cli*lower_bound)} - \${round(formatted_number_cli*upper_bound)}''')
 
                 # Plotting the energy scale
                 st.subheader(f"Energy Consumption Quartiles for {params['state_name']}")
