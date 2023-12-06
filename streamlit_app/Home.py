@@ -18,9 +18,13 @@ st.markdown("<h2 style='text-align: center; color: #CF5050;'> 🌩️ U.S. house
 
 # Check if the month is November or December
 if current_date.month in [11, 12]:
-    st.markdown("<center><img src='https://upload.wikimedia.org/wikipedia/commons/5/54/House_decorated_with_Christmas_lights_at_Moreton_Hall_-_geograph.org.uk_-_1140703.jpg' alt='David Ayrton / Wikimedia' width = 300></center>", unsafe_allow_html=True)
+    image_url = 'https://upload.wikimedia.org/wikipedia/commons/5/54/House_decorated_with_Christmas_lights_at_Moreton_Hall_-_geograph.org.uk_-_1140703.jpg'
+    author_ref = 'David Ayrton / Wikimedia'
+    st.markdown(f"<center><img src='{image_url}' alt='{author_ref}' width = 300></center>", unsafe_allow_html=True)
 else:
-    st.markdown("<center><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Las_Vegas_%28Nevada%2C_USA%29%2C_The_Strip_--_2012_--_6232.jpg/320px-Las_Vegas_%28Nevada%2C_USA%29%2C_The_Strip_--_2012_--_6232.jpg' alt='Dietmar Rabich / Wikimedia' width = 300></center>", unsafe_allow_html=True)
+    image_url = 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Las_Vegas_%28Nevada%2C_USA%29%2C_The_Strip_--_2012_--_6232.jpg/320px-Las_Vegas_%28Nevada%2C_USA%29%2C_The_Strip_--_2012_--_6232.jpg'
+    author_ref = 'Dietmar Rabich / Wikimedia'
+    st.markdown(f"<center><img src='{image_url}' alt='{author_ref}' width = 300></center>", unsafe_allow_html=True)
 
 st.markdown('''
 
@@ -58,4 +62,4 @@ st.markdown('''
 
             ''')
 
-st.markdown('Image source: [David Ayrton / Wikimedia](https://commons.wikimedia.org/wiki/File:House_decorated_with_Christmas_lights_at_Moreton_Hall_-_geograph.org.uk_-_1140703.jpg)')
+st.markdown(f'Image source: [{author_ref}]({image_url})')
