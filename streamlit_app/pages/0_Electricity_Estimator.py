@@ -8,8 +8,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 ########## page info ############
 
-st.set_page_config(page_title='U.S. household electricity consumption'
-                   , page_icon='🏠')
+st.set_page_config(page_title='Electricity consumption'
+                   , page_icon=':bulb:')
 
 ############ initiate parameters for API request ############
 params={}
