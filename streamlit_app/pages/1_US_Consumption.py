@@ -30,8 +30,9 @@ df['text'] = df['State'] + '<br>' + \
 
 
 
+st.markdown("<h2 style='text-align: center; '> U.S. electricity consumption statistics </h2>", unsafe_allow_html=True)
 
-st.title('US Electricity Consumption')
+#st.title('US Electricity Consumption')
 
 # Create a choropleth map using plotly.graph_objects
 fig = go.Figure(data=go.Choropleth(
@@ -50,7 +51,7 @@ fig = go.Figure(data=go.Choropleth(
 
 # Update layout for the map
 fig.update_layout(
-    title='Average Electricity Consumption per state',
+    #title='Average Electricity Consumption per state',
     geo=dict(
         scope='usa',
         projection=go.layout.geo.Projection(type='albers usa'),  # Define the projection
