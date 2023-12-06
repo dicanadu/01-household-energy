@@ -3,8 +3,10 @@ import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
 
-st.set_page_config(page_title='U.S. Consumption'
+st.set_page_config(page_title='U.S. wide consumption'
                    , page_icon=':us:')
+
+
 
 data = {
     "State" : ['CA', 'NY', 'VT', 'DC', 'ME', 'NH', 'MA', 'AK', 'RI', 'CT', 'WI', 'CO', 'NM', 'MI', 'HI', 'WY', 'NJ', 'IL', 'MT', 'MN', 'UT', 'OH', 'PA', 'IA', 'ID', 'SD', 'OR', 'WA', 'NV', 'NE', 'IN', 'DE', 'MD', 'ND', 'KS', 'MO', 'WV', 'NC', 'VA', 'OK', 'KY', 'AR', 'SC', 'GA', 'AZ', 'TX', 'TN', 'FL', 'MS', 'AL', 'LA']
@@ -28,13 +30,12 @@ df['text'] = df['State'] + '<br>' + \
     'Monthly kWh: ' + df['Monthly kWh'] + '<br>' + \
     'Monthly Bill: $' + df['Monthly bill'] + '<br>' + \
     'Respondents: ' + df['Number of responders'] + '<br>' + \
-    'Rank (lowest kWh): ' + df['Rank']
+    'Rank: ' + df['Rank']
 
 
 
 st.markdown("<h2 style='text-align: center; '> U.S. electricity consumption statistics </h2>", unsafe_allow_html=True)
 
-#st.title('US Electricity Consumption')
 
 # Create a choropleth map using plotly.graph_objects
 fig = go.Figure(data=go.Choropleth(
@@ -74,3 +75,12 @@ fig.update_layout(
 #)
 
 st.plotly_chart(fig)
+
+st.markdown('''
+            Hover over the state to show:
+            - yearly consumption per state (kWh)
+            - monthly consumption per state (kWh)
+            - monthly average electricity bill
+            - number of respondents to the survey
+            - the rank of the state by electricity consumption (1 = lowest)
+            ''')
