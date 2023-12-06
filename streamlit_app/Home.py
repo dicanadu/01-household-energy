@@ -26,7 +26,9 @@ st.markdown('''
 
 :rainbow[Welcome!]
 
-This application will estimate your electrical energy consumption.
+Living in or moving to the U.S.? Planning to buy a house? Wondering about your electricity bill?
+
+This application will estimate your electrical energy consumption!
 
 ''')
 
