@@ -141,7 +141,7 @@ def plot_energy_scale(pred_kwh, state_name, pred_kwh_filter):
 
 ########### hard-coded constants ###############
 
-label_dict = {'REGIONC': 'Census Region', 'state_name': 'State Name', 'BA_climate': 'Building America Climate Zone', 'TYPEHUQ': 'Type of housing unit', 'STORIES': 'Number of stories', 'YEARMADERANGE': 'Age of housing unit', 'NCOMBATH': 'Bathrooms', 'NHAFBATH': 'Half bathrooms', 'TOTROOMS': 'Rooms (excluding bathrooms)', 'WALLTYPE': 'Major outside wall material', 'ROOFTYPE': "Major roofing material; 'Not applicable' applies to apartment buildings with 5 or more units", 'WINDOWS': 'Windows', 'SWIMPOOL': 'Have swimming pool', 'NUMFRIG': 'Refrigerators', 'MICRO': 'Microwaves', 'DISHWASH': 'Have dishwasher', 'CWASHER': 'Have clothes washer', 'DRYER': 'Have clothes dryer', 'TVCOLOR': 'Television', 'DESKTOP': 'Computers', 'NUMLAPTOP': 'Laptop computers', 'TELLWORK': 'Any household member teleworking', 'HEATHOME': 'Space heating equipment', 'EQUIPM': 'Main space heating equipment', 'NUMPORTEL': 'Portable electric heaters', 'AIRCOND': 'Have air conditioner', 'LGTIN1TO4': 'Inside light bulbs', 'LGTIN4TO8': 'Inside light bulbs', 'LGTINMORE8': 'Inside light bulbs', 'SMARTMETER': 'Have electricity smart meter', 'SOLAR': "On-site electricity generation from solar; 'Not applicable' applies to apartment buildings with 2 or more units.", 'NHSLDMEM': 'Household members', 'SQFTEST': 'Square footage'}
+label_dict = {'REGIONC': 'Census Region', 'state_name': 'State Name', 'BA_climate': 'Building America Climate Zone', 'TYPEHUQ': 'Type of housing unit :house_buildings:', 'STORIES': 'Number of stories', 'YEARMADERANGE': 'Age of housing unit', 'NCOMBATH': 'Bathrooms', 'NHAFBATH': 'Half bathrooms', 'TOTROOMS': 'Rooms (excluding bathrooms)', 'WALLTYPE': 'Major outside wall material', 'ROOFTYPE': "Major roofing material; 'Not applicable' applies to apartment buildings with 5 or more units", 'WINDOWS': 'Windows', 'SWIMPOOL': 'Have swimming pool', 'NUMFRIG': 'Refrigerators', 'MICRO': 'Microwaves', 'DISHWASH': 'Have dishwasher', 'CWASHER': 'Have clothes washer', 'DRYER': 'Have clothes dryer', 'TVCOLOR': 'Television', 'DESKTOP': 'Computers', 'NUMLAPTOP': 'Laptop computers', 'TELLWORK': 'Any household member teleworking', 'HEATHOME': 'Space heating equipment', 'EQUIPM': 'Main space heating equipment', 'NUMPORTEL': 'Portable electric heaters', 'AIRCOND': 'Have air conditioner', 'LGTIN1TO4': 'Inside light bulbs', 'LGTIN4TO8': 'Inside light bulbs', 'LGTINMORE8': 'Inside light bulbs', 'SMARTMETER': 'Have electricity smart meter', 'SOLAR': "On-site electricity generation from solar; 'Not applicable' applies to apartment buildings with 2 or more units.", 'NHSLDMEM': 'Household members :man-woman-girl-boy:', 'SQFTEST': 'Square footage :house_with_garden:'}
 values_dict = {'REGIONC': 'Midwest\nNortheast\nSouth\nWest', 'state_name': 'state_dictionary!A1', 'BA_climate': 'Cold\nHot-Dry\nHot-Humid\nMarine\nMixed-Dry\nMixed-Humid\nSubarctic\nVery-Cold', 'TYPEHUQ': '1 Mobile home\n2 Single-family house detached from any other house \n3 Single-family house attached to one or more other houses\n4 Apartment in a building with 2 to 4 units\n5 Apartment in a building with 5 or more units', 'STORIES': '1 One story\n2 Two stories\n3 Three stories\n4 Four or more stories\n5 Split-level\n-2 Not applicable', 'YEARMADERANGE': '1 Before 1950\n2 1950 to 1959\n3 1960 to 1969\n4 1970 to 1979\n5 1980 to 1989\n6 1990 to 1999\n7 2000 to 2009\n8 2010 to 2015\n9 2016 to 2020', 'NCOMBATH': '0 - 4', 'NHAFBATH': '0 - 2', 'TOTROOMS': '1-15', 'WALLTYPE': '1 Brick\n2 Wood\n3 Siding (aluminum, fiber cement, vinyl, or steel) \n4 Stucco\n5 Shingle (composition)\n6 Stone \n7 Concrete block \n99 Other', 'ROOFTYPE': '1 Ceramic or clay tiles\n2 Wood shingles/shakes\n3 Metal\n4 Slate or synthetic slate\n5 Shingles (composition or asphalt)\n6 Concrete tiles\n99 Other\n-2 Not applicable', 'WINDOWS': '1 1 or 2 windows\n2 3 to 5 windows\n3 6 to 9 windows\n4 10 to 15 windows\n5 16 to 19 windows\n6 20 to 29 windows\n7 30 or more windows', 'SWIMPOOL': '1 Yes\n0 No\n-2 Not applicable', 'NUMFRIG': '0 - 9', 'MICRO': '0 - 3', 'DISHWASH': '1 Yes\n0 No', 'CWASHER': '1 Yes\n0 No', 'DRYER': '1 Yes\n0 No', 'TVCOLOR': '0 - 14', 'DESKTOP': '0 - 8', 'NUMLAPTOP': '0 - 20', 'TELLWORK': '1 Yes\n0 No', 'HEATHOME': '1 Yes\n0 No', 'EQUIPM': '3 Central furnace \n2 Steam or hot water system\n4 Central heat pump\n13 Ductless heat pump\n5 Built-in electric units\n7 Built-in room heater\n8 Wood or pellet stove \n10 Portable electric heaters\n99 Other \n-2 Not applicable', 'NUMPORTEL': '1 - 9\n-2 Not applicable', 'AIRCOND': '1 Yes\n0 No', 'LGTIN1TO4': '0 - 90', 'LGTIN4TO8': '0 - 84', 'LGTINMORE8': '0 - 99', 'SMARTMETER': "1 Yes\n0 No\n-4 Don't Know", 'SOLAR': '1 Yes\n0 No\n-2 Not applicable', 'NHSLDMEM': '1 - 7', 'SQFTEST': '240-15000'}
 
 # U.S. states selector
@@ -213,51 +213,51 @@ def make_numeric_input(feature):
     return label, min_value, max_value, defaults_numeric.get(feature)
 
 
-def record_user_input(feature):
-    """
-    This function creates an input widget for a feature
-    Depending on which type the feature is.
-    It will write the user input value into params dictionary.
-    """
-    ##### geography features ######
-    if feature=='state_name':
-        state_postal = st.selectbox('Select your state:', states.keys(), 4)
-        params['state_name'] = states.get(state_postal)
-        params['PRICEKWH'] = price_per_state.get(params['state_name'])
-        #params['REGIONC'] = state_to_region.get(params['state_name'])
-        params['BA_climate'] = climate_dict.get(params['state_name'])
-
-    ##### hard-coded features #####
-    elif feature in ['NHAFBATH','NUMLAPTOP','LGTIN4TO8','LGTINMORE8', 'SMARTMETER']:
-        params[feature]=0
-
-    ##### yes - no features #####
-    elif feature in yes_no_features:
-        params[feature] = int(st.toggle(label=label_dict.get(feature)
-                                        , value=binary_defaults.get(feature)))
-
-    ##### features that need a dropdown text #####
-    elif feature in selectbox_features:
-        params[feature] = st.selectbox(label = label_dict.get(feature),
-                                    options= values_dict.get(feature).split('\n'))
-    ##### features with purely numeric input #####
-    elif feature in numeric_features:
-        params[feature] = int(st.number_input(*make_numeric_input(feature)))
-
-    ##### features where dropdown input is transferred to numeric #####
-    elif feature in num_checkbox_features:
-        user_value = st.radio(label=label_dict.get(feature),
-                                  options=mapped_features.get(feature).keys()
-                                  , index = categorical_defaults.get(feature))
-        params[feature] = int(mapped_features.get(feature).get(user_value))
-
-    ##### features which have both numeric range and text #####
-    # TODO get rid of them, we impute the text values anyway
-    elif feature in numeric_features_dropdown:
-        user_value = st.selectbox(label=label_dict.get(feature),
-                                  options=mapped_features.get(feature).keys())
-        params[feature] = int(mapped_features.get(feature).get(user_value))
-
+#def record_user_input(feature):
+#    """
+#    This function creates an input widget for a feature
+#    Depending on which type the feature is.
+#    It will write the user input value into params dictionary.
+#    """
+#    ##### geography features ######
+#    if feature=='state_name':
+#        state_postal = st.selectbox('Select your state :earth_americas:', states.keys(), 4)
+#        params['state_name'] = states.get(state_postal)
+#        params['PRICEKWH'] = price_per_state.get(params['state_name'])
+#        #params['REGIONC'] = state_to_region.get(params['state_name'])
+#        params['BA_climate'] = climate_dict.get(params['state_name'])
+#
+#    ##### hard-coded features #####
+#    elif feature in ['NHAFBATH','NUMLAPTOP','LGTIN4TO8','LGTINMORE8', 'SMARTMETER']:
+#        params[feature]=0
+#
+#    ##### yes - no features #####
+#    elif feature in yes_no_features:
+#        params[feature] = int(st.toggle(label=label_dict.get(feature)
+#                                        , value=binary_defaults.get(feature)))
+#
+#    ##### features that need a dropdown text #####
+#    elif feature in selectbox_features:
+#        params[feature] = st.selectbox(label = label_dict.get(feature),
+#                                    options= values_dict.get(feature).split('\n'))
+#    ##### features with purely numeric input #####
+#    elif feature in numeric_features:
+#        params[feature] = int(st.number_input(*make_numeric_input(feature)))
+#
+#    ##### features where dropdown input is transferred to numeric #####
+#    elif feature in num_checkbox_features:
+#        user_value = st.radio(label=label_dict.get(feature),
+#                                  options=mapped_features.get(feature).keys()
+#                                  , index = categorical_defaults.get(feature))
+#        params[feature] = int(mapped_features.get(feature).get(user_value))
+#
+#    ##### features which have both numeric range and text #####
+#    # TODO get rid of them, we impute the text values anyway
+#    elif feature in numeric_features_dropdown:
+#        user_value = st.selectbox(label=label_dict.get(feature),
+#                                  options=mapped_features.get(feature).keys())
+#        params[feature] = int(mapped_features.get(feature).get(user_value))
+#
 def record_user_input_2(feature: str = None, input_type: str = None):
     """
     Records user input based on the specified feature and input type.
@@ -274,8 +274,8 @@ def record_user_input_2(feature: str = None, input_type: str = None):
     None
     """
     if feature == 'state_name':
-        # Handle state_name input
-        state_postal = st.selectbox('Select your state:', sorted(states.keys()), 4)
+        # Handle state_name input:flag-us:
+        state_postal = st.selectbox('Select your state :flag-us:', sorted(states.keys()), 4)
         params['state_name'] = states.get(state_postal)
         params['PRICEKWH'] = price_per_state.get(params['state_name'])
         params['BA_climate'] = climate_dict.get(params['state_name'])
@@ -338,16 +338,16 @@ with tab_main:
     c1, c2 = st.columns(2)
 
     with c1:
-        st.markdown(':red[Your house] :house_buildings:')
+        #st.markdown(':red[Your house] :house_buildings:')
         record_user_input_2('TYPEHUQ', 'radio')
-        st.markdown(':red[House area] :european_castle:')
+        #st.markdown(':red[House area] :european_castle:')
         record_user_input_2('SQFTEST', 'number_input')
 
     with c2:
-        st.markdown(':red[Your people] 👨‍👩‍👧‍👧')
+        #st.markdown(':red[Your people] 👨‍👩‍👧‍👧')
         record_user_input_2('NHSLDMEM', 'number_input')
 
-        st.markdown(':red[Your location] :world_map:')
+        #st.markdown(':red[Your location] :world_map:')
         record_user_input_2('state_name', 'selectbox')
 
 
