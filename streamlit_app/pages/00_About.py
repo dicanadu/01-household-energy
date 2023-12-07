@@ -42,9 +42,8 @@ st.markdown('''
 :green[**Model dataflow**] '''
 )
 
-file_path=os.path.join(os.path.dirname(__file__), "images","household_energy_flowchart.png")
+file_path = os.path.join(os.path.dirname(__file__), "images","household_energy_flowchart.png")
 flowchart_img = Image.open(file_path)
-# streamlit_app/pages/00_About.py
 st.image(flowchart_img)
 st.markdown('''
 
@@ -106,56 +105,12 @@ st.markdown('''
 
 st.markdown('''
 
-Finally for predictions, pass the below parameters to our [API](https://household-predictions-final2-jaiabuy6eq-ew.a.run.app/predict)
+Finally for predictions, pass the below parameters to our [API](https://us-electricity-estimator-jaiabuy6eq-ew.a.run.app/predict)
 
 Call our API and try it yourself !!!!
 
 : )
 ''')
-
-#variable = ['TYPEHUQ','NHSLDMEM','state_name','BA_climate','SQFTEST','STORIES','YEARMADERANGE','NCOMBATH','NHAFBATH','TOTROOMS','WINDOWS','SWIMPOOL','SMARTMETER','DESKTOP','NUMLAPTOP','TVCOLOR','DISHWASH','MICRO','NUMFRIG','CWASHER','DRYER','LGTIN1TO4','LGTIN4TO8','LGTINMORE8','AIRCOND','EQUIPM','HEATHOME','NUMPORTEL','PRICEKWH']
-#description = ['Type of housing unit','Number of household members','State Name','Building America Climate Zone','Respondent-reported square footage (rounded to the nearest 10)','Number of stories in a single-family home','Range when housing unit was built','Number of full bathrooms','Number of half bathrooms','Total number of rooms in the housing unit, excluding bathrooms; a derived variable','Number of windows','Has swimming pool','Home has an electricity smart meter','Number of desktop computers used','Number of laptop computers used','Number of televisions used','Has dishwasher','Number of microwaves','Number of refrigerators used','Has clothes washer in home','Has clothes dryer in home','Number of inside light bulbs turned on 1 to 4 hours per day','Number of inside light bulbs turned on 4 to 8 hours per day','Number of inside light bulbs turned on more than 8 hours per day','Air conditioning equipment used','Main space heating equipment type','Space heating equipment used','Number of portable electric heaters used','Price paid per kWh']
-#variable_df = pd.DataFrame({"variable": variable, "description": description}).set_index("variable")
-#variable_df.index.name = None
-#
-## Set Streamlit option to display all rows
-#user_input = {
-#  "TYPEHUQ": 2,
-#  "SQFTEST": 1530,
-#  "NHSLDMEM": 2,
-#  "state_name": "California",
-#  "PRICEKWH": 0.2999,
-#  "BA_climate": "Cold",
-#  "TOTROOMS": 6,
-#  "STORIES": 1,
-#  "YEARMADERANGE": 4,
-#  "HEATHOME": 1,
-#  "SMARTMETER": 0,
-#  "NCOMBATH": 2,
-#  "NHAFBATH": 0,
-#  "EQUIPM": 3,
-#  "WINDOWS": 4,
-#  "SWIMPOOL": 0,
-#  "DESKTOP": 0,
-#  "NUMLAPTOP": 0,
-#  "MICRO": 1,
-#  "NUMPORTEL": 0,
-#  "CWASHER": 1,
-#  "AIRCOND": 1,
-#  "TVCOLOR": 2,
-#  "NUMFRIG": 1,
-#  "LGTIN1TO4": 4,
-#  "LGTIN4TO8": 0,
-#  "LGTINMORE8": 0,
-#  "DRYER": 1,
-#  "DISHWASH": 1
-#}
-#df_2 = pd.DataFrame(user_input, index = [0]).T
-#converged_pd = pd.merge(variable_df, df_2, left_index=True, right_index=True)
-#converged_pd.columns = ["Description", "Example"]
-#
-#st.dataframe(converged_pd)
-#
 
 variable = ['TYPEHUQ', 'NHSLDMEM', 'state_name', 'BA_climate', 'SQFTEST',
        'STORIES', 'YEARMADERANGE', 'NCOMBATH', 'NHAFBATH', 'TOTROOMS',

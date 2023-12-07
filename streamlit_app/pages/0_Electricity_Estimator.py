@@ -16,7 +16,7 @@ params={}
 
 ############### API ###########################
 
-url="https://household-predictions-final2-jaiabuy6eq-ew.a.run.app/predict"
+url="https://us-electricity-estimator-jaiabuy6eq-ew.a.run.app/predict"
 
 # @st.cache_data(ttl=3600) # cache data for 1 hour
 
