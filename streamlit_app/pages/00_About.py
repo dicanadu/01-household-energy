@@ -32,13 +32,18 @@ st.markdown('''
 The base model is a :green[**Linear Regression!**] on selected features, which were:
  - Cleaned (Outliers, Missing values, Imputation)
  - Preprocessed (Feature Engineering, MinMaxScaler, StandardScaler, OneHotEncoder)
- - Tunned (Adjusting parameters)
+ - Tuned (Adjusting parameters)
  - Fitted
 ''')
 
-url_chart = ''
-st.markdown
+st.markdown('''
+:green[**Model dataflow**] '''
+)
 
+from PIL import Image
+flowchart_img = Image.open('pages/images/household_energy_flowchart.png')
+# streamlit_app/pages/00_About.py
+st.image(flowchart_img)
 st.markdown('''
 
 The model uses the following features:
@@ -107,7 +112,7 @@ Call our API and try it yourself !!!!
 ''')
 
 #variable = ['TYPEHUQ','NHSLDMEM','state_name','BA_climate','SQFTEST','STORIES','YEARMADERANGE','NCOMBATH','NHAFBATH','TOTROOMS','WINDOWS','SWIMPOOL','SMARTMETER','DESKTOP','NUMLAPTOP','TVCOLOR','DISHWASH','MICRO','NUMFRIG','CWASHER','DRYER','LGTIN1TO4','LGTIN4TO8','LGTINMORE8','AIRCOND','EQUIPM','HEATHOME','NUMPORTEL','PRICEKWH']
-#description = ['Type of housing unit','Number of household members (top-coded)','State Name','Building America Climate Zone','Respondent-reported square footage (rounded to the nearest 10)','Number of stories in a single-family home','Range when housing unit was built','Number of full bathrooms (top-coded)','Number of half bathrooms (top-coded)','Total number of rooms in the housing unit, excluding bathrooms; a derived variable','Number of windows','Has swimming pool','Home has an electricity smart meter','Number of desktop computers used','Number of laptop computers used','Number of televisions used','Has dishwasher','Number of microwaves','Number of refrigerators used','Has clothes washer in home','Has clothes dryer in home','Number of inside light bulbs turned on 1 to 4 hours per day','Number of inside light bulbs turned on 4 to 8 hours per day','Number of inside light bulbs turned on more than 8 hours per day','Air conditioning equipment used','Main space heating equipment type','Space heating equipment used','Number of portable electric heaters used','Price paid per kWh']
+#description = ['Type of housing unit','Number of household members','State Name','Building America Climate Zone','Respondent-reported square footage (rounded to the nearest 10)','Number of stories in a single-family home','Range when housing unit was built','Number of full bathrooms','Number of half bathrooms','Total number of rooms in the housing unit, excluding bathrooms; a derived variable','Number of windows','Has swimming pool','Home has an electricity smart meter','Number of desktop computers used','Number of laptop computers used','Number of televisions used','Has dishwasher','Number of microwaves','Number of refrigerators used','Has clothes washer in home','Has clothes dryer in home','Number of inside light bulbs turned on 1 to 4 hours per day','Number of inside light bulbs turned on 4 to 8 hours per day','Number of inside light bulbs turned on more than 8 hours per day','Air conditioning equipment used','Main space heating equipment type','Space heating equipment used','Number of portable electric heaters used','Price paid per kWh']
 #variable_df = pd.DataFrame({"variable": variable, "description": description}).set_index("variable")
 #variable_df.index.name = None
 #
@@ -156,13 +161,13 @@ variable = ['TYPEHUQ', 'NHSLDMEM', 'state_name', 'BA_climate', 'SQFTEST',
        'TVCOLOR', 'DISHWASH', 'MICRO', 'NUMFRIG', 'CWASHER', 'DRYER',
        'LGTIN1TO4', 'LGTIN4TO8', 'LGTINMORE8', 'AIRCOND', 'EQUIPM',
        'HEATHOME', 'NUMPORTEL']
-description = ['Type of housing unit', 'Number of household members (top-coded)',
+description = ['Type of housing unit', 'Number of household members',
        'State Name', 'Building America Climate Zone',
        'Respondent-reported square footage (rounded to the nearest 10)',
        'Number of stories in a single-family home',
        'Range when housing unit was built',
-       'Number of full bathrooms (top-coded)',
-       'Number of half bathrooms (top-coded)',
+       'Number of full bathrooms',
+       'Number of half bathrooms',
        'Total number of rooms in the housing unit, excluding bathrooms; a derived variable',
        'Number of windows', 'Has swimming pool',
        'Home has an electricity smart meter',
@@ -183,7 +188,7 @@ data_type = [' int', ' int', ' str', ' str', ' int', ' int', ' int', ' int',
        ' int', ' int', ' int', ' int', ' int', ' int', ' int', ' int',
        ' int', ' int', ' int', ' int']
 example = ['1 Mobile home\n2 Single-family house detached from any other house \n3 Single-family house attached to one or more other houses (for example: duplex, row house, or townhome)\n4 Apartment in a building with 2 to 4 units\n5 Apartment in a building with 5 or more units',
-       '1 - 7', 'Alaska - Wyominggit ',
+       '1 - 7', 'Alaska - Wyoming ',
        'Cold\nHot-Dry\nHot-Humid\nMarine\nMixed-Dry\nMixed-Humid\nSubarctic\nVery-Cold',
        '240-15000',
        '1 One story\n2 Two stories\n3 Three stories\n4 Four or more stories\n5 Split-level\n-2 Not applicable',

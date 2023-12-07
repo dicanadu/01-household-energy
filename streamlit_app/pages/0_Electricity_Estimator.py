@@ -150,7 +150,25 @@ def record_user_input(feature: str = None, input_type: str = None):
 
 
 def api_call(url, params, toggle_state):
-    # Modify the params based on the toggle_state if needed
+    """
+    Perform an API call to retrieve energy consumption predictions.
+
+    Parameters:
+    - url (str): The URL of the API endpoint.
+    - params (dict): The parameters to be included in the API request.
+    - toggle_state (bool): A boolean flag indicating whether to request monthly or annual predictions.
+
+    Returns:
+    tuple: A tuple containing two elements:
+        - pred_kwh (float): The predicted energy consumption in kilowatt-hours.
+        - pred_kwh_filter (str): A string indicating whether the prediction is for "monthly" or "annual" consumption.
+
+    Example:
+    >>> url = "https://example.com/api/energy_predictions"
+    >>> params = {'location': 'City1', 'date': '2023-01-01'}
+    >>> toggle_state = True
+    >>> pred_kwh, pred_kwh_filter = api_call(url, params, toggle_state)
+    """
     if toggle_state:
         params['toggle_state'] = toggle_state
         response = requests.get(url, params).json()
@@ -160,36 +178,62 @@ def api_call(url, params, toggle_state):
         response = requests.get(url, params).json()
         pred_kwh = response.get("KWH")
         pred_kwh_filter = "annual"
-    # output prediction:
     return pred_kwh, pred_kwh_filter
 
+
 def calculate():
+    """
+    Perform parallelized calculations for energy consumption predictions.
+
+    Returns:
+    tuple: A tuple containing two elements:
+        - result: The final result of the calculations (type may vary based on the actual calculation).
+        - pred_kwh_filter (str): A string indicating whether the prediction is for "monthly" or "annual" consumption.
+
+    Example:
+    >>> result, pred_kwh_filter = calculate()
+    """
     counts = range(300)
     total_counts = len(counts)
-    with st.spinner("Running..."):
+    with st.spinner("Estimating..."):
         with ThreadPoolExecutor() as executor:
             bar = st.progress(0)
             placeholder = st.empty()
 
-            # Initialize variables to track progress
             completed_count = 0
 
+            # Submit API calls in parallel using ThreadPoolExecutor
             futures = [executor.submit(api_call, url, params, toggle_state) for count in counts]
 
-            # Wait for all futures to complete
             for future in as_completed(futures):
                 result, pred_kwh_filter = future.result()
                 completed_count += 1
 
-                # Update progress bar
+                # Update progress bar and completion percentage
                 progress = completed_count / total_counts
                 placeholder.text(f"{int(progress * 100)}%")
                 bar.progress(progress)
 
-            # Return the result and pred_kwh_filter from the first completed future
             return result, pred_kwh_filter
 
+
 def plot_energy_scale(pred_kwh, state_name, pred_kwh_filter):
+    """
+    Plot a horizontal bar chart showing the energy consumption quartiles for a specific state
+    and highlight the position of a given energy consumption value (pred_kwh).
+
+    Parameters:
+    - pred_kwh (float): The energy consumption value to be highlighted on the chart.
+    - state_name (str): The name of the state for which the quartiles are being plotted.
+    - pred_kwh_filter (str): A string indicating whether the prediction is for "monthly" or "annual" consumption.
+
+    Returns:
+    matplotlib.figure.Figure: The matplotlib Figure object containing the generated plot.
+
+    Example:
+    >>> fig = plot_energy_scale(500, 'California', 'monthly')
+    >>> plt.show()
+    """
 
     # Assuming breakdown_per_state[state_name] is a list
     breakdown_list = breakdown_per_state[state_name]
@@ -290,16 +334,16 @@ with tab_main:
 
     with c1:
         #st.markdown(':red[Your house] :house_buildings:')
-        record_user_input_2('TYPEHUQ', 'radio')
+        record_user_input('TYPEHUQ', 'radio')
         #st.markdown(':red[House area] :european_castle:')
-        record_user_input_2('SQFTEST', 'number_input')
+        record_user_input('SQFTEST', 'number_input')
 
     with c2:
         #st.markdown(':red[Your people] 👨‍👩‍👧‍👧')
-        record_user_input_2('NHSLDMEM', 'number_input')
+        record_user_input('NHSLDMEM', 'number_input')
 
         #st.markdown(':red[Your location] :world_map:')
-        record_user_input_2('state_name', 'selectbox')
+        record_user_input('state_name', 'selectbox')
 
 
 ###### section HOUSEHOLD CHARACTERISTICS ######
@@ -386,7 +430,7 @@ with st.sidebar:
                         st.metric(label=f'Your estimated {pred_kwh_filter} cost:', #\n
                                 value = f'${formatted_number}', #
                                 delta = None)
-                        st.markdown(f'''Estimated between: \${round(formatted_number_cli*lower_bound)}.00 - \${round(formatted_number_cli*upper_bound)}.00''')
+                        st.markdown(f'''Estimate between: \${round(formatted_number_cli*lower_bound)} - \${round(formatted_number_cli*upper_bound)}''')
 
                 else:
                     col1, col2 = st.columns(2)
@@ -403,7 +447,7 @@ with st.sidebar:
                         st.metric(label=f'Your estimated {pred_kwh_filter} cost:', #\n
                                 value = f'${formatted_number}', #
                                 delta = None)
-                        st.markdown(f'''Estimated between: \${round(formatted_number_cli*lower_bound)} - \${round(formatted_number_cli*upper_bound)}''')
+                        st.markdown(f'''Estimate between: \${round(formatted_number_cli*lower_bound)} - \${round(formatted_number_cli*upper_bound)}''')
 
                 # Plotting the energy scale
                 st.subheader(f"Energy Consumption Quartiles for {params['state_name']}")

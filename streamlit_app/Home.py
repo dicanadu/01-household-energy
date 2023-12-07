@@ -4,12 +4,6 @@ from datetime import datetime
 # Get the current date
 current_date = datetime.now()
 
-# TODO
-# nice image + source
-# our names
-# link to github repo
-# link to data sources
-
 st.set_page_config(page_title='U.S. household electricity consumption'
                    , page_icon='🏠')
 
@@ -49,9 +43,9 @@ st.markdown('''
 
 st.divider()
 
-st.markdown('This project is a part of Le Wagon Data Science bootcamp held in Berlin in October-December 2023.')
+st.markdown('This project is a part of Le Wagon Data Science bootcamp held in Berlin in October-December 2023')
 
-st.markdown('Authors: Diego Canales, Richard Kemp, Serkan Sanli, Svetlana Lebedeva.')
+st.subheader('Authors: [Diego Canales](https://www.linkedin.com/in/diego-canales-794564a1/), [Richard Kemp](https://www.linkedin.com/in/richard-kemp-432851163/), [Serkan Sanli](https://www.linkedin.com/in/serkan-sanli-6a0861257/), [Svetlana Lebedeva](https://www.linkedin.com/in/svetlana-lebedeva-7b400110a/)')
 
 st.markdown('[Link to github repository](https://github.com/dicanadu/01-household-energy)')
 
