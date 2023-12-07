@@ -439,7 +439,7 @@ with st.sidebar:
                         st.metric(label=f'Your estimated {pred_kwh_filter} consumption:', #\n
                                 value = f'{int(pred_kwh)} kWh', #
                                 delta = None)
-                        st.markdown(f'''Estimate between: {int(round(formatted_pred_kwh_cli*lower_bound,-1))} - {int(round(formatted_pred_kwh_cli*upper_bound,-1))} kWh.''')
+                        st.markdown(f'''Estimate between: {int(round(formatted_pred_kwh_cli*lower_bound,-1))} - {int(round(formatted_pred_kwh_cli*upper_bound,-1))} kWh''')
 
 
                     with col2:
