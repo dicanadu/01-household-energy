@@ -34,14 +34,14 @@ user_input = {
 
 #url = "https://household-predictions-apilog-jaiabuy6eq-ew.a.run.app/predict"
 #url2 = "https://household-predictions-apilog-improved-jaiabuy6eq-ew.a.run.app/predict"
-#url3= "http://localhost:8000/predict"
-url = "https://household-predictions-final-jaiabuy6eq-ew.a.run.app/predict"
+url3= "https://us-electricity-estimator-jaiabuy6eq-ew.a.run.app/predict"
+#url = "https://household-predictions-final-jaiabuy6eq-ew.a.run.app/predict"
 
 url2 = "https://household-predictions-final2-jaiabuy6eq-ew.a.run.app/predict"
 #65print("Im a running")
 
 print("TEsting FINAL")
-response = requests.get(url, user_input)
+response = requests.get(url3, user_input)
 #print(response.content)
 print(response.json())
 
