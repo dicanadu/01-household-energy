@@ -45,10 +45,6 @@ st.divider()
 
 st.markdown('This project is a part of Le Wagon Data Science bootcamp held in Berlin in October-December 2023')
 
-st.subheader('Authors: [Diego Canales](https://www.linkedin.com/in/diego-canales-794564a1/), [Richard Kemp](https://www.linkedin.com/in/richard-kemp-432851163/), [Serkan Sanli](https://www.linkedin.com/in/serkan-sanli-6a0861257/), [Svetlana Lebedeva](https://www.linkedin.com/in/svetlana-lebedeva-7b400110a/)')
-
-st.markdown('[Link to github repository](https://github.com/dicanadu/01-household-energy)')
-
 st.markdown('''
             Data sources:
 
@@ -59,3 +55,7 @@ st.markdown('''
             ''')
 
 st.markdown(f'Image source: [{author_ref}]({image_url})')
+
+st.subheader('Authors: [Diego Canales](https://www.linkedin.com/in/diego-canales-794564a1/), [Richard Kemp](https://www.linkedin.com/in/richard-kemp-432851163/), [Serkan Sanli](https://www.linkedin.com/in/serkan-sanli-6a0861257/), [Svetlana Lebedeva](https://www.linkedin.com/in/svetlana-lebedeva-7b400110a/)')
+
+st.markdown('[Link to github repository](https://github.com/dicanadu/01-household-energy)')
