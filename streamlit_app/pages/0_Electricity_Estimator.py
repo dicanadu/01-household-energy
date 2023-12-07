@@ -315,7 +315,7 @@ def plot_energy_scale(pred_kwh, state_name, pred_kwh_filter):
 tab_main, tab_household, tab_appliances, tab_results = st.tabs([
 
                                                     'About your home'
-                                                   ,'Household characteristics'
+                                                   ,'House characteristics'
                                                     ,'Appliances'
                                                     ,'Results'
                                                     ]) #, tab_admin
@@ -328,7 +328,7 @@ tab_main, tab_household, tab_appliances, tab_results = st.tabs([
 
 with tab_main:
 
-    st.subheader('About your home')
+    st.subheader('Describe your home')
 
     c1, c2 = st.columns(2)
 
@@ -348,7 +348,7 @@ with tab_main:
 
 ###### section HOUSEHOLD CHARACTERISTICS ######
 with tab_household:
-    st.subheader('Your household')
+    st.subheader('Describe house characteristics')
 
     col1, col2 = st.columns(2)
 
@@ -368,7 +368,7 @@ with tab_household:
         record_user_input('SWIMPOOL', 'toggle')
 
 with tab_appliances:
-    st.subheader('Appliances')
+    st.subheader('List appliances')
 
     col1, col2 = st.columns(2)
 
