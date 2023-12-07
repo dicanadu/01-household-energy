@@ -28,6 +28,14 @@ It's a representative sample of :green[**18,500 Housing units**] combined with e
 st.divider()
 
 st.markdown('''
+:green[**Model dataflow**] '''
+)
+
+file_path = os.path.join(os.path.dirname(__file__), "images","household_energy_flowchart.png")
+flowchart_img = Image.open(file_path)
+st.image(flowchart_img)
+
+st.markdown('''
 
 :green[**About the model!**]
 
@@ -38,13 +46,6 @@ The base model is a :green[**Linear Regression!**] on selected features, which w
  - Fitted
 ''')
 
-st.markdown('''
-:green[**Model dataflow**] '''
-)
-
-file_path = os.path.join(os.path.dirname(__file__), "images","household_energy_flowchart.png")
-flowchart_img = Image.open(file_path)
-st.image(flowchart_img)
 st.markdown('''
 
 The model uses the following features:
