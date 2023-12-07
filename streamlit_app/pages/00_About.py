@@ -35,6 +35,8 @@ file_path = os.path.join(os.path.dirname(__file__), "images","household_energy_f
 flowchart_img = Image.open(file_path)
 st.image(flowchart_img)
 
+st.divider()
+
 st.markdown('''
 
 :green[**About the model!**]
