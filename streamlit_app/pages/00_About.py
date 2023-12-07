@@ -8,7 +8,7 @@ st.set_page_config(page_title='About'
                    , page_icon=':computer:')
 
 # nicer header with html:
-st.markdown("<h2 style='text-align: center;'> How does our model work? </h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center;'> How does our app work? </h2>", unsafe_allow_html=True)
 
 
 st.markdown('''
