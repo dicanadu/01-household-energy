@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+from PIL import Image
+import os
 
 st.set_page_config(page_title='About'
                    , page_icon=':computer:')
@@ -40,8 +42,8 @@ st.markdown('''
 :green[**Model dataflow**] '''
 )
 
-from PIL import Image
-flowchart_img = Image.open('pages/household_energy_flowchart.png')
+file_path=os.path.join(os.path.dirname(__file__), "images","household_energy_flowchart.png")
+flowchart_img = Image.open(file_path)
 # streamlit_app/pages/00_About.py
 st.image(flowchart_img)
 st.markdown('''
