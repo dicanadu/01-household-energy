@@ -28,6 +28,8 @@ Living in or moving to the U.S.? Planning to buy a house? Wondering about your e
 
 This application will estimate your electrical energy consumption!
 
+[our user persona](https://villains.fandom.com/wiki/Catalina_Creel?file=Catalina+%28Close+Up%29.jpg)
+
 ''')
 
 st.divider()
