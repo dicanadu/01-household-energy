@@ -41,7 +41,7 @@ st.markdown('''
 )
 
 from PIL import Image
-flowchart_img = Image.open('pages/images/household_energy_flowchart.png')
+flowchart_img = Image.open('pages/household_energy_flowchart.png')
 # streamlit_app/pages/00_About.py
 st.image(flowchart_img)
 st.markdown('''
