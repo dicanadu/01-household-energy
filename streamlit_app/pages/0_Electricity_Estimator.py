@@ -108,7 +108,7 @@ def record_user_input(feature: str = None, input_type: str = None):
     """
     if feature == 'state_name':
         # Handle state_name input
-        state_postal = st.selectbox('Select your state:', sorted(states.keys()), 4)
+        state_postal = st.selectbox('Select your state', sorted(states.keys()), 4)
         params['state_name'] = states.get(state_postal)
         params['PRICEKWH'] = price_per_state.get(params['state_name'])
         params['BA_climate'] = climate_dict.get(params['state_name'])
@@ -424,7 +424,7 @@ with st.sidebar:
                         st.metric(label=f'Your estimated {pred_kwh_filter} consumption:', #\n
                                 value = f'{int(pred_kwh)} kWh', #
                                 delta = None)
-                        st.markdown(f'''Estimate between: {int(round(formatted_pred_kwh_cli*lower_bound,-1))} - {int(round(formatted_pred_kwh_cli*upper_bound,-1))} kWh.''')
+                        st.markdown(f'''Estimate between: {int(round(formatted_pred_kwh_cli*lower_bound,-1))} - {int(round(formatted_pred_kwh_cli*upper_bound,-1))} kWh''')
                     with col2:
                         formatted_number = "{:.2f}".format(int(pred_kwh)*user_price)
                         st.metric(label=f'Your estimated {pred_kwh_filter} cost:', #\n
